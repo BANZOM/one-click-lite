@@ -4,6 +4,21 @@ import os
 from dotenv import load_dotenv
 from utils.validators import validate_ip, validate_username, validate_pub_key  
 from service.create_user import create_user_on_server
+import logging
+
+logger = logging.getLogger(__name__)  
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+file_handler = logging.FileHandler('logs/app.log') 
+file_handler.setLevel(logging.DEBUG)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+console_handler.setFormatter(formatter)
+logger.addHandler(console_handler)
 
 load_dotenv()
 
@@ -13,32 +28,47 @@ CORS(app)
 @app.route('/create-user', methods=['POST'])
 def create_user():
     """API endpoint to create a user on multiple servers."""
+    logger.info("Received /create-user request")
+
     data = request.get_json()
     if not data or 'username' not in data or 'ips' not in data or 'pub_key' not in data:  
-        return jsonify({'error': 'Invalid input: username, ips, and pub_key are required'}), 400
+        message = 'Invalid username. Use only letters, numbers, underscores, and hyphens'
+        logger.warning(message)
+        return jsonify({'error': message}), 400
 
     username = data.get('username')
     ip_string = data.get('ips', '')
     pub_key = data.get('pub_key')  
 
     if not validate_username(username):
-        return jsonify({'error': 'Invalid username. Use only letters, numbers, underscores, and hyphens'}), 400
+        message = 'Invalid username. Use only letters, numbers, underscores, and hyphens'
+        logger.warning(message)
+        return jsonify({'error': message}), 400
 
-    if not validate_pub_key(pub_key): 
-        return jsonify({'error': 'Invalid public key format'}), 400
+    if not validate_pub_key(pub_key):
+        message = 'Invalid public key format'
+        logger.warning(message)
+        return jsonify({'error': message}), 400
 
     ips = [ip.strip() for ip in ip_string.split(',')]
     invalid_ips = [ip for ip in ips if not validate_ip(ip)]
     if invalid_ips:
-        return jsonify({'error': f'Invalid IP addresses: {", ".join(invalid_ips)}'}), 400
+        message = f'Invalid IP addresses: {", ".join(invalid_ips)}'
+        logger.warning(message)
+        return jsonify({'error': message}), 400
 
     if not ips:
-        return jsonify({'error': 'At least one IP is required'}), 400
+        message = 'At least one IP is required'
+        logger.warning(message)
+        return jsonify({'error': message}), 400
 
     results = {}
     for ip in ips:
-        success, message = create_user_on_server(ip, username, pub_key)  
+        success, message = create_user_on_server(ip, username, pub_key)
         results[ip] = {'success': success, 'message': message}
+        if not success:
+            logger.error(f"Failed to create user {username} on {ip}: {message}")
+
 
     return jsonify(results), 200
 
