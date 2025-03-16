@@ -7,7 +7,7 @@ from service.create_user import create_user_on_server
 import logging
 
 logging.basicConfig(
-    level=logging.DEBUG, 
+    level=logging.INFO, 
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.FileHandler('logs/app.log'), 
@@ -34,7 +34,8 @@ def create_user():
 
     username = data.get('username')
     ip_string = data.get('ips', '')
-    pub_key = data.get('pub_key')  
+    pub_key = data.get('pub_key')
+    add_to_sudoers = data.get('add_to_sudoers', False)  
 
     if not validate_username(username):
         message = 'Invalid username. Use only letters, numbers, underscores, and hyphens'
@@ -60,7 +61,7 @@ def create_user():
 
     results = {}
     for ip in ips:
-        success, message = create_user_on_server(ip, username, pub_key)
+        success, message = create_user_on_server(ip, username, pub_key, add_to_sudoers)
         results[ip] = {'success': success, 'message': message}
         if not success:
             logger.error(f"Failed to create user {username} on {ip}: {message}")

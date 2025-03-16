@@ -6,7 +6,7 @@ from service.csv_service import write_to_csv
 
 logger = logging.getLogger(__name__)  
 
-def create_user_on_server(ip, username, pub_key):
+def create_user_on_server(ip, username, pub_key, add_to_sudoers=False):
     """Creates a user on a remote server via SSH.
 
     Attempts password-based authentication first, then falls back to PEM key authentication.
@@ -31,24 +31,70 @@ def create_user_on_server(ip, username, pub_key):
         """Helper function to execute commands and check for errors."""
         logger.debug(f"Attempting to create user '{username}' on {ip}")
 
-        stdin, stdout, stderr = client.exec_command(f"id -u {username}")
-        if stdout.channel.recv_exit_status() == 0:
-            message = f"User '{username}' already exists on {ip}"
-            logger.warning(message)
-            return False, message
+        stdin, stdout, stderr = client.exec_command(f"id -un {username} 2>/dev/null && groups {username}")
+        exit_status = stdout.channel.recv_exit_status()
+        user_exists = (exit_status == 0)
+        groups = ""
+        if user_exists:
+            output = stdout.read().decode('utf-8').strip()
+            parts = output.split(":")
+            if len(parts) > 1:
+                groups = parts[1].strip()
+            logger.info(f"User '{username}' already exists on {ip}")
 
-        commands = [
-            f"sudo useradd -m -s /bin/bash {username}",
-            f"sudo mkdir -p /home/{username}/.ssh",
-            f"sudo chown -R {username}:{username} /home/{username}/.ssh",
-            f"sudo chmod 700 /home/{username}/.ssh",
-        ]
-        if pub_key:
+        commands = []
+        if not user_exists:
             commands.extend([
-                f"sudo sh -c 'echo \"{pub_key}\" >> /home/{username}/.ssh/authorized_keys'",
-                f"sudo chown {username}:{username} /home/{username}/.ssh/authorized_keys",
-                f"sudo chmod 600 /home/{username}/.ssh/authorized_keys",
+                f"sudo useradd -m -s /bin/bash {username}",
+                f"sudo mkdir -p /home/{username}/.ssh",
+                f"sudo chown -R {username}:{username} /home/{username}/.ssh",
+                f"sudo chmod 700 /home/{username}/.ssh",
             ])
+            logger.info(f"Creating user '{username}' on {ip}")
+        else:
+            logger.info(f"User '{username}' already exists on {ip}, proceeding with other configurations")
+
+        if pub_key:
+            stdin, stdout, stderr = client.exec_command(f"test -d /home/{username}/.ssh")
+            ssh_dir_exists = stdout.channel.recv_exit_status() == 0
+            
+            if not ssh_dir_exists:
+                commands.extend([
+                    f"sudo mkdir -p /home/{username}/.ssh",  # Ensures .ssh exists
+                    f"sudo chown {username}:{username} /home/{username}/.ssh",
+                    f"sudo chmod 700 /home/{username}/.ssh",
+                ])
+                logger.info(f"Creating .ssh directory for user '{username}' on {ip}")
+            
+            stdin, stdout, stderr = client.exec_command(f"test -f /home/{username}/.ssh/authorized_keys")
+            auth_keys_exists = stdout.channel.recv_exit_status() == 0
+            
+            if not auth_keys_exists:
+                commands.append(f"sudo touch /home/{username}/.ssh/authorized_keys")
+                commands.append(f"sudo chown {username}:{username} /home/{username}/.ssh/authorized_keys")
+                commands.append(f"sudo chmod 600 /home/{username}/.ssh/authorized_keys")
+                logger.info(f"Creating authorized_keys file for user '{username}' on {ip}")
+            
+            # Check if the key already exists in authorized_keys
+            stdin, stdout, stderr = client.exec_command(f"sudo grep -Fwq '{pub_key}' /home/{username}/.ssh/authorized_keys || echo 'NOT_FOUND'")
+            print(f"sudo grep -Fwq '{pub_key}' /home/{username}/.ssh/authorized_keys || echo 'NOT_FOUND'")
+            output = stdout.read().decode().strip()
+            print(output)
+            if output == 'NOT_FOUND':
+                # Add the key safely using printf to avoid issues with special characters
+                commands.append(f"sudo sh -c 'printf \"%s\\n\" \"{pub_key}\" >> /home/{username}/.ssh/authorized_keys'")
+                commands.append(f"sudo chown {username}:{username} /home/{username}/.ssh/authorized_keys")
+                commands.append(f"sudo chmod 600 /home/{username}/.ssh/authorized_keys")
+                logger.info(f"Adding public key for user '{username}' on {ip}")
+            else:
+                logger.info(f"Public key for user '{username}' on '{ip}' already exists")
+
+        if add_to_sudoers:
+            if f"sudo" not in groups:
+                commands.append(f"sudo usermod -aG sudo {username}")
+                logger.info(f"Adding user '{username}' to the sudo group on {ip}")
+            else:
+                logger.info(f"User '{username}' is already in the sudo group on {ip}")
 
         for command in commands:
             logger.debug(f"Executing command on {ip}: {command}")
@@ -61,8 +107,10 @@ def create_user_on_server(ip, username, pub_key):
                 return False, message
             logger.debug(stdout.read().decode('utf-8').strip())
 
-        message = f"User '{username}' created successfully on {ip}"
-        logger.info(message)
+        if user_exists:
+            message = f"User '{username}' configured successfully on {ip}."
+        else:
+            message = f"User '{username}' created and configured successfully on {ip}."
         write_to_csv(username, ip) 
         return True, message
 
@@ -72,20 +120,11 @@ def create_user_on_server(ip, username, pub_key):
                 logger.info(f"Attempting password authentication to {ip} as {admin_username}")
                 ssh_client.connect(ip, username=admin_username, password=admin_password)
                 success, message = _execute_commands(ssh_client)
-                if success:
-                    return success, message
-                if "already exists" in message:
-                    return False, message
-                else:
-                    logger.warning(f"Password authentication succeeded, but user creation failed: {message}")
-                    # Fallback to key-based auth
+                return success, message
             except paramiko.AuthenticationException:
                 logger.warning(f"Password authentication failed for {ip}. Trying key-based authentication...")
-            except socket.error as e: 
-                logger.error(f"Socket error connecting to {ip}: {e}")
-                return False, str(e)
-            except Exception as e:
-                logger.exception(f"An error occurred during password authentication for {ip}: {e}")  
+            except (socket.error, Exception) as e:
+                logger.exception(f"Error during password authentication for {ip}: {e}")
                 return False, str(e)
             
         if pem_file_path and os.path.exists(pem_file_path):
@@ -96,11 +135,8 @@ def create_user_on_server(ip, username, pub_key):
             except paramiko.AuthenticationException:
                 logger.error(f"Key-based authentication failed for {ip}.")
                 return False, "Key-based authentication failed"
-            except socket.error as e:
-                logger.error(f"Socket error connecting to {ip}: {e}")
-                return False, str(e)
-            except Exception as e:
-                logger.exception(f"An error occurred during key-based authentication: {e}")
+            except (socket.error, Exception) as e:
+                logger.exception(f"Error during key-based authentication for {ip}: {e}")
                 return False, str(e)
             
         elif pem_file_path:
