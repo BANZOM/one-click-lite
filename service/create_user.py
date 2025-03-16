@@ -4,9 +4,7 @@ import socket
 import logging
 from service.csv_service import write_to_csv
 
-logger = logging.getLogger(__name__)  # Use the module name for the logger
-logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)  
 
 def create_user_on_server(ip, username, pub_key):
     """Creates a user on a remote server via SSH.
@@ -76,6 +74,8 @@ def create_user_on_server(ip, username, pub_key):
                 success, message = _execute_commands(ssh_client)
                 if success:
                     return success, message
+                if "already exists" in message:
+                    return False, message
                 else:
                     logger.warning(f"Password authentication succeeded, but user creation failed: {message}")
                     # Fallback to key-based auth
