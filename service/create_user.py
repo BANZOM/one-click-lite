@@ -77,9 +77,7 @@ def create_user_on_server(ip, username, pub_key, add_to_sudoers=False):
             
             # Check if the key already exists in authorized_keys
             stdin, stdout, stderr = client.exec_command(f"sudo grep -Fwq '{pub_key}' /home/{username}/.ssh/authorized_keys || echo 'NOT_FOUND'")
-            print(f"sudo grep -Fwq '{pub_key}' /home/{username}/.ssh/authorized_keys || echo 'NOT_FOUND'")
             output = stdout.read().decode().strip()
-            print(output)
             if output == 'NOT_FOUND':
                 # Add the key safely using printf to avoid issues with special characters
                 commands.append(f"sudo sh -c 'printf \"%s\\n\" \"{pub_key}\" >> /home/{username}/.ssh/authorized_keys'")
@@ -95,6 +93,9 @@ def create_user_on_server(ip, username, pub_key, add_to_sudoers=False):
                 logger.info(f"Adding user '{username}' to the sudo group on {ip}")
             else:
                 logger.info(f"User '{username}' is already in the sudo group on {ip}")
+        elif f"sudo" in groups:
+            commands.append(f"sudo deluser {username} sudo")
+            logger.info(f"Removing user '{username}' from the sudo group on {ip}")
 
         for command in commands:
             logger.debug(f"Executing command on {ip}: {command}")
