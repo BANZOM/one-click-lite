@@ -119,7 +119,7 @@ def create_user_on_server(ip, username, pub_key, add_to_sudoers=False):
         if admin_password:
             try:
                 logger.info(f"Attempting password authentication to {ip} as {admin_username}")
-                ssh_client.connect(ip, username=admin_username, password=admin_password)
+                ssh_client.connect(ip, username=admin_username, password=admin_password, timeout=5)
                 success, message = _execute_commands(ssh_client)
                 return success, message
             except paramiko.AuthenticationException:

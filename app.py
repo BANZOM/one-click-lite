@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 from utils.validators import validate_ip, validate_username, validate_pub_key  
+from utils.group_ip_provider import get_ips_from_group
 from service.create_user import create_user_on_server
 import logging
 
@@ -33,7 +34,8 @@ def create_user():
         return jsonify({'error': message}), 400
 
     username = data.get('username')
-    ip_string = data.get('ips', '')
+    group_string = data.get('groups', '')
+    manual_ip_string = data.get('ips', '')
     pub_key = data.get('pub_key')
     add_to_sudoers = data.get('add_to_sudoers', False)  
 
@@ -46,14 +48,26 @@ def create_user():
         message = 'Invalid public key format'
         logger.warning(message)
         return jsonify({'error': message}), 400
+    
+    ips = []
+    
+    if group_string:
+        groups = [group.strip() for group in group_string.split(',') if group.strip()]
+        for group in groups:
+            group_ips = get_ips_from_group(group)
+            ips.extend(group_ips)
 
-    ips = [ip.strip() for ip in ip_string.split(',')]
-    invalid_ips = [ip for ip in ips if not validate_ip(ip)]
-    if invalid_ips:
-        message = f'Invalid IP addresses: {", ".join(invalid_ips)}'
-        logger.warning(message)
-        return jsonify({'error': message}), 400
-
+    if manual_ip_string:
+        manual_ips = [ip.strip() for ip in manual_ip_string.split(',') if ip.strip()]
+        for ip in manual_ips:
+            if validate_ip(ip):
+                ips.append(ip)
+            else:
+                message = f'Invalid IP address: {ip}'
+                logger.warning(message)
+                return jsonify({'error': message}), 400
+            
+    ips = list(set(ips))
     if not ips:
         message = 'At least one IP is required'
         logger.warning(message)
