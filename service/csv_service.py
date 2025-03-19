@@ -42,40 +42,79 @@ def get_all_servers_for_user(username):
         logger.warning(f"CSV file not found: {DATA_FILE}")
     return list(servers)
 
-def remove_user_records_from_csv(username):
-    """Removes all records for a given user from the CSV using fileinput for in-place editing."""
+def remove_user_records_from_csv(username: str, ip: str =None):
+    """Removes user records from the CSV.
+
+    If ip is None, removes ALL records for the user.
+    If ip is provided, removes only records matching both username and ip.
+    """
     records_removed = False
-    
+
     try:
-        with open(DATA_FILE, 'r', newline='') as csvfile:
-            reader = csv.reader(csvfile)
-            header = next(reader)
-            username_index = header.index('Username')
-        
+        try:
+            with open(DATA_FILE, 'r', newline='') as csvfile:
+                reader = csv.reader(csvfile)
+                header = next(reader)
+                username_index = header.index('Username')
+                ip_index = header.index('IP Address')  
+        except (FileNotFoundError, StopIteration):
+            logger.warning(f"CSV file '{DATA_FILE}' is empty or missing.")
+            return
+        except ValueError as e:
+            logger.error(f"CSV file '{DATA_FILE}' is missing required columns: {e}")
+            return
+
         for line in fileinput.input(DATA_FILE, inplace=True):
             if fileinput.isfirstline():
-                sys.stdout.write(line)
+                sys.stdout.write(line) 
                 continue
-                
+
             row = next(csv.reader([line]))
-            
-            if row and len(row) > username_index and row[username_index] != username:
-                sys.stdout.write(line)
+
+            if row and len(row) > max(username_index, ip_index):
+                if ip is None: 
+                    if row[username_index] != username:
+                        sys.stdout.write(line)
+                    else:
+                        records_removed = True
+                else: 
+                    if row[username_index] != username or row[ip_index] != ip:
+                        sys.stdout.write(line)
+                    else:
+                        records_removed = True
             else:
-                records_removed = True
-        
+                logger.warning(f"Malformed row in CSV: {line.strip()}")
+
         if records_removed:
-            logger.info(f"Removed all records for user '{username}' from {DATA_FILE}")
+            if ip is None:
+                logger.info(f"Removed all records for user '{username}' from {DATA_FILE}")
+            else:
+                logger.info(f"Removed record(s) for user '{username}' and IP '{ip}' from {DATA_FILE}")
         else:
-            logger.warning(f"No records found for user '{username}' in {DATA_FILE}")
-    
-    except FileNotFoundError:
-        logger.error(f"Original CSV file not found: {DATA_FILE}")
+            if ip is None:
+                logger.warning(f"No records found for user '{username}' in {DATA_FILE}")
+            else:
+                logger.warning(f"No records found for user '{username}' and IP '{ip}' in {DATA_FILE}")
+
     except Exception as e:
-        logger.error(f"An error occurred during CSV processing: {e}")
+        logger.exception(f"An error occurred during CSV processing: {e}")
 
 if __name__ == "__main__":
     # Example usage
-    write_to_csv("banzo", "127.0.0.13")
-    remove_user_records_from_csv("banzo")
-    print(get_all_servers_for_user("banzo"))
+    # write_to_csv("banzo", "127.0.0.13")
+    # write_to_csv("banzo", "127.0.0.14")
+    # write_to_csv("banzo", "127.0.0.15")
+    # write_to_csv("testuser", "192.168.1.100")
+    # write_to_csv("testuser", "192.168.1.101")
+    # write_to_csv("anotheruser", "10.0.0.5")
+    # write_to_csv("anotheruser", "10.0.0.6")
+    # write_to_csv("yetanother", "172.16.0.10")
+    # write_to_csv("yetanother", "172.16.0.11")
+    # write_to_csv("lastuser", "192.168.0.50")
+
+    # Test removing records
+    # remove_user_records_from_csv("banzo")
+    # remove_user_records_from_csv("testuser", "192.168.1.100")
+    pass
+    
+    
