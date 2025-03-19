@@ -128,18 +128,6 @@ def remove_user():
         success, message = remove_user_from_server(ip, username)
         results[ip] = {'success': success, 'message': message}
 
-    # if all successful, remove records from CSV
-    if all(result['success'] for result in results.values()):
-        try:
-            if remove_from_all:
-                remove_user_records_from_csv(username)
-            else:
-                for ip in target_ips:
-                    remove_user_records_from_csv(username, ip)
-        except Exception as e:
-            logger.error(f"Error removing user records from CSV: {e}")
-            return jsonify({'error': 'Failed to remove user records from CSV'}), 500
-
     return jsonify(results), 200
 
 if __name__ == '__main__':

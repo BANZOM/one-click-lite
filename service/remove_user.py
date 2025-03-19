@@ -1,4 +1,6 @@
 import logging
+
+from service.csv_service import remove_user_records_from_csv
 logger = logging.getLogger(__name__)
 
 def remove_user_from_server(ip, username):
@@ -39,6 +41,17 @@ def remove_user_from_server(ip, username):
 
         message = f"User '{username}' removed successfully from {ip}"
         logger.info(message)
+
+        # recheck
+        stdin, stdout, stderr = ssh_client.exec_command(f"id -u {username}")
+        user_exists = stdout.channel.recv_exit_status() == 0
+        if user_exists:
+            message = f"User '{username}' still exists on {ip} after removal"
+            logger.error(message)
+            return False, message
+        message = f"User '{username}' successfully removed from {ip}"
+        logger.info(message)
+        remove_user_records_from_csv(username, ip)  
         return True, message
 
     finally:
