@@ -1,0 +1,45 @@
+import logging
+logger = logging.getLogger(__name__)
+
+def remove_user_from_server(ip, username):
+    """
+    Remove a user from the server at the specified IP address.
+
+    Args:
+        ip: The IP address of the server.
+        username: The username to remove.
+
+    Returns:
+        A tuple: (success, message), where success is a boolean indicating
+        success or failure, and message is a string containing output or error.
+    """
+    ssh_client = create_ssh_client() #TODO: implement create_ssh_client function
+
+    try:
+        success, message = connect_ssh(ssh_client, ip)  #TODO: implement connect_ssh function
+        if not success:
+            return success, message
+
+        stdin, stdout, stderr = ssh_client.exec_command(f"id -u {username}")
+        user_exists = stdout.channel.recv_exit_status() == 0
+
+        if not user_exists:
+            message = f"User '{username}' does not exist on {ip}"
+            logger.info(message)
+            return True, message 
+
+        stdin, stdout, stderr = ssh_client.exec_command(f"sudo userdel -r {username}")
+        exit_status = stdout.channel.recv_exit_status()
+
+        if exit_status != 0:
+            error_message = stderr.read().decode('utf-8').strip()
+            message = f"Error removing user '{username}' from {ip}: {error_message}"
+            logger.error(message)
+            return False, message
+
+        message = f"User '{username}' removed successfully from {ip}"
+        logger.info(message)
+        return True, message
+
+    finally:
+        ssh_client.close() 
