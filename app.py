@@ -3,7 +3,7 @@ from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 from service.remove_user import remove_user_from_server
-from service.csv_service import get_all_servers_for_user
+from service.csv_service import get_all_servers_for_user, remove_user_records_from_csv
 from utils.validators import validate_ip, validate_username, validate_pub_key  
 from utils.group_ip_provider import get_ips_from_group
 from service.create_user import create_user_on_server
@@ -127,6 +127,18 @@ def remove_user():
     for ip in target_ips:
         success, message = remove_user_from_server(ip, username)
         results[ip] = {'success': success, 'message': message}
+
+    # if all successful, remove records from CSV
+    if all(result['success'] for result in results.values()):
+        try:
+            if remove_from_all:
+                remove_user_records_from_csv(username)
+            else:
+                for ip in target_ips:
+                    remove_user_records_from_csv(username, ip)
+        except Exception as e:
+            logger.error(f"Error removing user records from CSV: {e}")
+            return jsonify({'error': 'Failed to remove user records from CSV'}), 500
 
     return jsonify(results), 200
 
