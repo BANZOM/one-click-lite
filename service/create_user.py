@@ -2,6 +2,7 @@ import paramiko
 import os
 import socket  
 import logging
+from service.crypt_service import decrypt_file
 from service.csv_service import write_to_csv
 
 logger = logging.getLogger(__name__)  
@@ -26,6 +27,7 @@ def create_user_on_server(ip, username, pub_key, add_to_sudoers=False):
     admin_username = os.getenv('ADMIN_USERNAME', "ubuntu")
     admin_password = os.getenv('ADMIN_PASSWORD', None)
     pem_file_path = os.getenv('PEM_FILE_PATH')
+    crypt_password = os.getenv('CRYPT_PASSWORD', None)
 
     def _execute_commands(client):
         """Helper function to execute commands and check for errors."""
@@ -75,7 +77,6 @@ def create_user_on_server(ip, username, pub_key, add_to_sudoers=False):
                 commands.append(f"sudo chmod 600 /home/{username}/.ssh/authorized_keys")
                 logger.info(f"Creating authorized_keys file for user '{username}' on {ip}")
             
-            # Check if the key already exists in authorized_keys
             stdin, stdout, stderr = client.exec_command(f"sudo grep -Fwq '{pub_key}' /home/{username}/.ssh/authorized_keys || echo 'NOT_FOUND'")
             output = stdout.read().decode().strip()
             if output == 'NOT_FOUND':
@@ -131,11 +132,14 @@ def create_user_on_server(ip, username, pub_key, add_to_sudoers=False):
         if pem_file_path and os.path.exists(pem_file_path):
             try:
                 logger.info(f"Attempting key-based authentication to {ip} as {admin_username} using {pem_file_path}")
-                ssh_client.connect(ip, username=admin_username, key_filename=pem_file_path)
+                private_key_data = decrypt_file(pem_file_path, crypt_password)
+                private_key = paramiko.RSAKey(file_obj=private_key_data.decode())
+                ssh_client.connect(ip, username=admin_username, pkey=private_key, timeout=5)
                 return _execute_commands(ssh_client)
             except paramiko.AuthenticationException:
-                logger.error(f"Key-based authentication failed for {ip}.")
-                return False, "Key-based authentication failed"
+                message = f"Key-based/Password authentication failed for {ip}."
+                logger.error(message)
+                return False, message
             except (socket.error, Exception) as e:
                 logger.exception(f"Error during key-based authentication for {ip}: {e}")
                 return False, str(e)
