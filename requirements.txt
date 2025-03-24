@@ -2,3 +2,4 @@ flask
 flask-cors
 paramiko
 python-dotenv
+cryptography
