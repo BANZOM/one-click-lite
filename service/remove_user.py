@@ -1,6 +1,6 @@
 import logging
-
 from service.csv_service import remove_user_records_from_csv
+from service.ssh_service import SSHClient
 logger = logging.getLogger(__name__)
 
 def remove_user_from_server(ip, username):
@@ -15,10 +15,10 @@ def remove_user_from_server(ip, username):
         A tuple: (success, message), where success is a boolean indicating
         success or failure, and message is a string containing output or error.
     """
-    ssh_client = create_ssh_client() #TODO: implement create_ssh_client function
+    ssh_client = SSHClient(ip)
 
     try:
-        success, message = connect_ssh(ssh_client, ip)  #TODO: implement connect_ssh function
+        success, message = ssh_client.connect()
         if not success:
             return success, message
 
@@ -55,4 +55,4 @@ def remove_user_from_server(ip, username):
         return True, message
 
     finally:
-        ssh_client.close() 
+        ssh_client.close()
