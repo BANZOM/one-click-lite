@@ -15,14 +15,13 @@ def remove_user_from_server(ip, username):
         A tuple: (success, message), where success is a boolean indicating
         success or failure, and message is a string containing output or error.
     """
-    ssh_client = SSHClient(ip)
-
+    client = SSHClient(ip)
     try:
-        success, message = ssh_client.connect()
+        success, message = client.connect()
         if not success:
             return success, message
 
-        stdin, stdout, stderr = ssh_client.exec_command(f"id -u {username}")
+        stdin, stdout, stderr = client.exec_command(f"id -u {username}")
         user_exists = stdout.channel.recv_exit_status() == 0
 
         if not user_exists:
@@ -30,7 +29,7 @@ def remove_user_from_server(ip, username):
             logger.info(message)
             return True, message 
 
-        stdin, stdout, stderr = ssh_client.exec_command(f"sudo userdel -r {username}")
+        stdin, stdout, stderr = client.exec_command(f"sudo userdel -r {username}")
         exit_status = stdout.channel.recv_exit_status()
 
         if exit_status != 0:
@@ -43,7 +42,7 @@ def remove_user_from_server(ip, username):
         logger.info(message)
 
         # recheck
-        stdin, stdout, stderr = ssh_client.exec_command(f"id -u {username}")
+        stdin, stdout, stderr = client.exec_command(f"id -u {username}")
         user_exists = stdout.channel.recv_exit_status() == 0
         if user_exists:
             message = f"User '{username}' still exists on {ip} after removal"
@@ -55,4 +54,4 @@ def remove_user_from_server(ip, username):
         return True, message
 
     finally:
-        ssh_client.close()
+        client.close()

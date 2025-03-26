@@ -22,7 +22,7 @@ class SSHClient(paramiko.SSHClient):
         self.ip = ip
         self.set_missing_host_key_policy(paramiko.WarningPolicy())
 
-    def connect(self):
+    def connect(self) -> tuple[bool, str]:
         if self._admin_password:
             try:
                 logger.info(f"Attempting password authentication to {self.ip} as {self._admin_username}")
