@@ -1,5 +1,6 @@
 # Configuration Sample
 
+## Create User Configuration
 Below is a sample JSON configuration object that you can use as a template:
 
 ```json
@@ -11,8 +12,7 @@ Below is a sample JSON configuration object that you can use as a template:
     "add_to_sudoers": true
 }
 ```
-
-## Field Descriptions
+### Field Descriptions
 
 - `username`: The system username to be created or configured
 - `groups`: The Groups for IP/Server Access
@@ -21,3 +21,22 @@ Below is a sample JSON configuration object that you can use as a template:
 - `add_to_sudoers`: Boolean flag to determine if the user should have sudo privileges
 
 Replace the values with your actual configuration data.
+
+## Remove User Configuration
+Below is a sample JSON configuration object for removing a user:
+
+```json
+{
+    "username": "sample_user",
+    "ips": [
+        "192.168.1.100",
+        ...
+    ],
+}
+```
+
+### Field Descriptions
+- `username`: The system username to be removed
+- `ips`: IP address(es) for access control
+
+
