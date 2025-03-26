@@ -32,13 +32,11 @@ Below is a sample JSON configuration object for removing a user:
         "192.168.1.100",
         ...
     ],
-    "remove_from_all": true, // if true, remove from all users, then no need to specify ips
 }
 ```
 
 ### Field Descriptions
 - `username`: The system username to be removed
 - `ips`: IP address(es) for access control
-- `remove_from_all`: Boolean flag to determine if the user should be removed from all users. If set to true, the `ips` field is ignored.
 
 
