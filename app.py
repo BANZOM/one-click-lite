@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
+from service.csv_service import get_all_servers_for_user
 from service.remove_user import remove_user_from_server
 from utils.validators import validate_ip, validate_username, validate_pub_key  
 from utils.group_ip_provider import get_ips_from_group
@@ -118,9 +119,8 @@ def remove_user():
                 logger.warning(message)
                 return jsonify({'error': message}), 400
             
-        target_ips = list(set(ips))
         results = {}
-        for ip in target_ips:
+        for ip in ips:
             success, message = remove_user_from_server(ip, username)
             results[ip] = {'success': success, 'message': message}
 
@@ -129,6 +129,34 @@ def remove_user():
     except Exception as e:
         logger.exception(f"An error occurred: {str(e)}")
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/list-user-servers', methods=['POST'])
+def list_user_servers():
+    "API endpoint to list all the servers from username"
+    logger.info("Received /list-user-servers request")
+    try:
+        data = request.get_json()
+        if not data or 'username' not in data:  
+            message = 'Invalid request. Username is required'
+            logger.warning(message)
+            return jsonify({'error': message}), 400
+
+        username = data.get('username')
+
+        if not validate_username(username):
+            message = 'Invalid username.'
+            logger.warning(message)
+            return jsonify({'error': message}), 400
+        
+        servers = get_all_servers_for_user(username)
+
+        return jsonify(servers), 200
+    
+    except Exception as e:
+        logger.exception(f"An error occurred: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=int(os.getenv('APP_PORT', 5000)))
