@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
@@ -24,9 +24,15 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/create-user', methods=['POST'])
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+@app.route('/create', methods=['POST', 'GET'])
 def create_user():
     """API endpoint to create a user on multiple servers."""
+    if request.method == 'GET':
+        return render_template('create.html', title='Create User - AccessPoint')
     try: 
         logger.info("Received /create-user request")
         data = request.get_json()
