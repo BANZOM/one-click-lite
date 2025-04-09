@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccessPoint - Internal Tool</title>
+    <!-- Link to the CSS file using Flask's url_for -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        <h1>Server Access Point</h1>
+        <div class="button-container">
+            <!-- Use <a> tags styled as buttons -->
+            <a href="{{ url_for('create_user') }}" id="give-access-btn" class="access-button primary">Give Access</a>
+            <a href="{{ url_for('remove_user') }}" id="remove-access-btn" class="access-button secondary">Remove Access</a>
+            <a href="{{ url_for('list_user_servers') }}" id="logs-btn" class="access-button tertiary">LOGS</a>
+        </div>
+    </div>
+
+    <!-- No JavaScript needed for basic navigation -->
+    <!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
+</body>
+</html>

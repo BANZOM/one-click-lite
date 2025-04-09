@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 from service.csv_service import get_all_servers_for_user
 from service.remove_user import remove_user_from_server
+from utils.get_group_list import get_group_list
 from utils.validators import validate_ip, validate_username, validate_pub_key  
 from utils.group_ip_provider import get_ips_from_group
 from service.create_user import create_user_on_server
@@ -24,15 +25,15 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/')
-def home():
-    return render_template('home.html')
+@app.route('/accesspoint', methods=['GET'])
+def accesspoint():
+    return render_template('accesspoint.html')
 
-@app.route('/create', methods=['POST', 'GET'])
+@app.route('/accesspoint/giveaccess', methods=['POST', 'GET'])
 def create_user():
     """API endpoint to create a user on multiple servers."""
     if request.method == 'GET':
-        return render_template('create.html', title='Create User - AccessPoint')
+        return render_template('giveaccess.html')
     try: 
         logger.info("Received /create-user request")
         data = request.get_json()

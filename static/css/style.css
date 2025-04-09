@@ -1,0 +1,97 @@
+/* Basic Reset & Body Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1e2127; /* Dark background */
+    color: #abb2bf; /* Light gray text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensure takes full viewport height */
+    text-align: center;
+}
+
+/* Container for Centering Content */
+.main-container {
+    padding: 20px;
+}
+
+/* Heading Style */
+h1 {
+    color: #61afef; /* A nice blue for the heading */
+    margin-bottom: 40px; /* Space below heading */
+    font-size: 3em; /* Large heading */
+    font-weight: 300; /* Lighter font weight */
+}
+
+/* Button Container for Vertical Layout */
+.button-container {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center buttons horizontally within the column */
+}
+
+/* Shared Button Styles (Applied to <a> tags now) */
+.access-button {
+    display: block; /* Ensure links take up width like buttons */
+    width: 250px; /* Fixed width for consistency */
+    padding: 20px 30px; /* Generous padding for large size */
+    margin-bottom: 20px; /* Space between buttons */
+    font-size: 1.2em; /* Larger font size */
+    font-weight: 600;
+    border: none;
+    border-radius: 8px; /* Slightly rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease; /* Smooth transitions */
+    color: #ffffff; /* White text on buttons */
+    text-decoration: none; /* REMOVE default link underline */
+    text-align: center; /* Ensure text is centered */
+}
+
+/* Remove margin from the last button */
+.access-button:last-child {
+    margin-bottom: 0;
+}
+
+/* Specific Button Colors (Example) */
+.access-button.primary {
+    background-color: #61afef; /* Blue */
+}
+
+.access-button.secondary {
+    background-color: #e06c75; /* Red/Coral */
+}
+
+.access-button.tertiary {
+    background-color: #98c379; /* Green */
+}
+
+/* Hover & Active States */
+.access-button:hover {
+    filter: brightness(1.1); /* Slightly brighten on hover */
+    text-decoration: none; /* Ensure underline doesn't reappear on hover */
+}
+
+.access-button:active {
+    transform: scale(0.98); /* Slightly shrink when clicked */
+    filter: brightness(0.95);
+}
+
+/* Basic Responsiveness */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2.5em;
+        margin-bottom: 30px;
+    }
+    .access-button {
+        width: 80%; /* Make buttons wider on smaller screens */
+        max-width: 300px; /* But not excessively wide */
+        padding: 18px 25px;
+        font-size: 1.1em;
+    }
+}
