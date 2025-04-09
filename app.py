@@ -33,7 +33,11 @@ def accesspoint():
 def create_user():
     """API endpoint to create a user on multiple servers."""
     if request.method == 'GET':
-        return render_template('giveaccess.html')
+        logger.info("Received /giveaccess request")
+        available_groups = get_group_list()
+        logger.info("Serving give access form.")
+        return render_template('giveaccess.html', available_groups=available_groups)
+       
     try: 
         logger.info("Received /create-user request")
         data = request.get_json()

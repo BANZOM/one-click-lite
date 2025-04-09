@@ -95,3 +95,318 @@ h1 {
         font-size: 1.1em;
     }
 }
+
+
+/* --- Give Access Form Styles --- */
+
+.form-container {
+    background-color: #282c34; /* Slightly lighter than body for contrast */
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 700px; /* Max width for the form */
+    margin: 20px;
+    text-align: left; /* Align text left within the form */
+    position: relative; /* For absolute positioning of back link */
+}
+
+.back-link {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: #61afef;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.form-container h1 {
+    text-align: center; /* Center heading */
+    color: #61afef;
+    margin-bottom: 30px;
+    font-weight: 400;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #abb2bf;
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+.form-input,
+textarea.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: #1e2127; /* Dark input background */
+    border: 1px solid #3b4048; /* Subtle border */
+    border-radius: 5px;
+    color: #abb2bf; /* Input text color */
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus,
+textarea.form-input:focus {
+    outline: none;
+    border-color: #61afef; /* Highlight focus */
+    box-shadow: 0 0 0 3px rgba(97, 175, 239, 0.2);
+}
+
+textarea.form-input {
+    resize: vertical; /* Allow vertical resize only */
+    min-height: 100px;
+    font-family: 'Courier New', Courier, monospace; /* Monospace for keys */
+}
+
+.field-hint {
+    display: block;
+    font-size: 0.85em;
+    color: #7f8a9f; /* Muted color for hints */
+    margin-top: 5px;
+}
+
+/* Checkbox Styles */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-top: 10px; /* Adjust spacing */
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    accent-color: #61afef; /* Color the checkmark */
+    cursor: pointer;
+}
+
+.checkbox-group label.checkbox-label {
+    margin-bottom: 0; /* Override default label margin */
+    font-weight: normal; /* Normal weight for checkbox label */
+    font-size: 1em;
+    cursor: pointer;
+}
+.checkbox-group .field-hint {
+    margin-left: 28px; /* Align hint under the label text */
+    margin-top: 2px;
+}
+
+/* --- Tag Input Styles --- */
+.tag-input-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow tags to wrap */
+    align-items: center;
+    padding: 5px 10px; /* Padding inside the container */
+    background-color: #1e2127;
+    border: 1px solid #3b4048;
+    border-radius: 5px;
+    min-height: 46px; /* Match input height */
+    cursor: text; /* Indicate text input */
+}
+.tag-input-container:focus-within { /* Style container when child input has focus */
+     border-color: #61afef;
+     box-shadow: 0 0 0 3px rgba(97, 175, 239, 0.2);
+}
+
+ul.tags-display {
+    display: contents; /* Make UL act like its children are direct descendants for flex */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tag {
+    display: inline-flex; /* Use flex for alignment within tag */
+    align-items: center;
+    background-color: #61afef; /* Blue tags */
+    color: #1e2127; /* Dark text on tag */
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin: 3px 5px 3px 0; /* Spacing around tags */
+    font-size: 0.9em;
+    font-weight: 500;
+}
+/* Different color for IP tags? Optional */
+#ip-tag-container .tag {
+    background-color: #98c379; /* Green tags for IPs */
+}
+
+.tag-remove {
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1em;
+    line-height: 1;
+    padding: 0 2px;
+}
+.tag-remove:hover {
+    color: #e06c75; /* Reddish color on hover */
+}
+
+input.tag-text-input {
+    flex-grow: 1; /* Take remaining space */
+    border: none;
+    outline: none;
+    padding: 8px 5px; /* Padding for the typing area */
+    background-color: transparent; /* Inherit container background */
+    color: #abb2bf;
+    min-width: 150px; /* Ensure minimum typing space */
+    font-size: 1em;
+}
+
+/* Suggestions Dropdown */
+.suggestions-list {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+    background-color: #2c313a;
+    border: 1px solid #3b4048;
+    border-radius: 5px;
+    max-height: 150px; /* Limit height */
+    overflow-y: auto; /* Add scroll if needed */
+    position: absolute; /* Position relative to form-group */
+    width: calc(100% - 2px); /* Match container width minus borders */
+    z-index: 10; /* Appear above other elements */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none; /* Hidden by default */
+}
+
+.suggestion-item {
+    padding: 10px 15px;
+    color: #abb2bf;
+    cursor: pointer;
+    border-bottom: 1px solid #3b4048;
+}
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover,
+.suggestion-item.active { /* Style for hover/keyboard nav */
+    background-color: #61afef;
+    color: #1e2127;
+}
+
+/* Submit Button & Loading */
+.submit-group {
+    text-align: right; /* Align button to the right */
+    margin-top: 30px;
+}
+
+.access-button .spinner {
+    display: inline-block;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s ease-infinite;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Feedback and Results Styles */
+.form-feedback {
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 0.95em;
+    display: none; /* Hidden by default */
+}
+.form-feedback.success {
+    background-color: rgba(152, 195, 121, 0.2); /* Green tint */
+    color: #98c379;
+    border: 1px solid #98c379;
+    display: block;
+}
+.form-feedback.error {
+    background-color: rgba(224, 108, 117, 0.2); /* Red tint */
+    color: #e06c75;
+    border: 1px solid #e06c75;
+    display: block;
+}
+.form-feedback.info {
+    background-color: rgba(97, 175, 239, 0.2); /* Blue tint */
+    color: #61afef;
+    border: 1px solid #61afef;
+    display: block;
+}
+
+
+.results-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #1e2127;
+    border: 1px solid #3b4048;
+    border-radius: 5px;
+}
+
+.results-container h2 {
+    color: #61afef;
+    margin-bottom: 15px;
+    font-weight: 400;
+    border-bottom: 1px solid #3b4048;
+    padding-bottom: 10px;
+}
+
+#results-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#results-list li {
+    padding: 8px 0;
+    border-bottom: 1px dashed #3b4048;
+    font-size: 0.9em;
+}
+#results-list li:last-child {
+    border-bottom: none;
+}
+
+#results-list .ip-address {
+    font-weight: bold;
+    color: #abb2bf;
+    display: inline-block;
+    min-width: 140px; /* Align messages */
+}
+
+#results-list .status-success {
+    color: #98c379; /* Green */
+    font-weight: bold;
+    margin-left: 10px;
+}
+#results-list .status-success::before {
+     content: '✔ ';
+}
+
+
+#results-list .status-failure {
+    color: #e06c75; /* Red */
+    font-weight: bold;
+    margin-left: 10px;
+}
+#results-list .status-failure::before {
+     content: '✖ ';
+}
+
+#results-list .message {
+    color: #7f8a9f;
+    margin-left: 5px;
+    font-style: italic;
+}

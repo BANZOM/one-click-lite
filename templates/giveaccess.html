@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grant Access - AccessPoint</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Pass available groups to JS via data attribute -->
+    <script>
+      // Make Flask data available globally (or attach to a specific element)
+      window.csrf_token = "{{ csrf_token() if csrf_token else '' }}"; // Add if using Flask-WTF CSRF protection
+      window.availableGroups = {{ available_groups | tojson }};
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <a href="{{ url_for('accesspoint') }}" class="back-link">&larr; Back to AccessPoint</a>
+        <h1>Grant Server Access</h1>
+
+        <div id="form-feedback" class="form-feedback" aria-live="polite"></div>
+
+        <form id="give-access-form" novalidate> <!-- novalidate prevents browser validation, we use JS -->
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-input" required placeholder="e.g., jdoe">
+                <small class="field-hint">Letters, numbers, underscores, hyphens only.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="group-input-field">Target Groups</label>
+                <div class="tag-input-container" id="group-tag-container">
+                    <ul class="tags-display" id="group-tags-display">
+                        <!-- Selected group tags will appear here -->
+                    </ul>
+                    <input type="text" id="group-input-field" class="tag-text-input" placeholder="Type or click to select groups...">
+                    <input type="hidden" name="groups" id="groups-hidden-input"> <!-- Stores comma-separated values -->
+                </div>
+                 <!-- Suggestions Dropdown -->
+                <ul class="suggestions-list" id="group-suggestions">
+                    <!-- JS will populate this -->
+                </ul>
+                 <small class="field-hint">Select groups to grant access to their associated servers.</small>
+            </div>
+
+            <!-- Manual IPs Input (Custom Tag Input) -->
+            <div class="form-group">
+                <label for="ip-input-field">Additional Target IPs</label>
+                <div class="tag-input-container" id="ip-tag-container">
+                     <ul class="tags-display" id="ip-tags-display">
+                        <!-- Entered IP tags will appear here -->
+                    </ul>
+                    <input type="text" id="ip-input-field" class="tag-text-input" placeholder="Enter IP address and press Enter...">
+                    <input type="hidden" name="ips" id="ips-hidden-input"> <!-- Stores comma-separated values -->
+                </div>
+                <small class="field-hint">Manually specify additional server IPs. Press Enter after each IP.</small>
+            </div>
+
+            <!-- Public Key Input -->
+            <div class="form-group">
+                <label for="pub_key">Public SSH Key</label>
+                <textarea id="pub_key" name="pub_key" class="form-input" rows="6" required placeholder="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ... user@host"></textarea>
+                <small class="field-hint">Paste the user's full public SSH key.</small>
+            </div>
+
+            <!-- Sudoers Checkbox -->
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="add_to_sudoers" name="add_to_sudoers" value="true">
+                <label for="add_to_sudoers" class="checkbox-label">Grant Sudo Privileges?</label>
+                 <small class="field-hint">If checked, the user will be added to the sudoers file (use with caution).</small>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group submit-group">
+                <button type="submit" id="submit-btn" class="access-button primary">
+                    Grant Access
+                    <span class="spinner" style="display: none;"></span> <!-- Loading indicator -->
+                 </button>
+            </div>
+        </form>
+
+        <!-- Area to display detailed results after submission -->
+        <div id="results-details" class="results-container" style="display: none;">
+            <h2>Processing Results</h2>
+            <ul id="results-list"></ul>
+        </div>
+
+    </div>
+
+    <!-- Link the specific JS for this page -->
+    <script src="{{ url_for('static', filename='js/giveaccess.js') }}"></script>
+</body>
+</html>
