@@ -205,49 +205,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const result = await response.json(); // Assume backend always returns JSON
 
-            if (response.ok) {
+            if (response.ok) { // Covers 200 and 207 status codes
+                // Show the main feedback message (success or info based on overall status)
                 showFeedback(result.message || 'Request processed successfully.', result.all_success ? 'success' : 'info');
 
-                // Display detailed results if available
-                if (result.results) {
-                    resultsDetailsDiv.style.display = 'block';
-                    Object.entries(result.results).forEach(([ip, res]) => {
-                        const li = document.createElement('li');
-                        const statusClass = res.success ? 'status-success' : 'status-failure';
-                        const messageText = res.message || (res.success ? 'Success' : 'Failure');
+                // *** Display detailed results if available ***
+                if (result.results && typeof result.results === 'object' && Object.keys(result.results).length > 0) {
+                    resultsListUl.innerHTML = ''; // Clear any previous results first
+                    resultsDetailsDiv.style.display = 'block'; // Show the container
 
+                    // Loop through the results object (IP is key, res is value object)
+                    Object.entries(result.results).forEach(([ip, res]) => {
+                        const li = document.createElement('li'); // Create a list item for each IP
+
+                        // Determine CSS class based on success status
+                        const statusClass = res.success ? 'status-success' : 'status-failure';
+
+                        // Get the message, provide a default if empty
+                        const messageText = res.message || (res.success ? 'Operation successful' : 'Operation failed');
+
+                        // Construct the HTML for the list item using defined CSS classes
                         li.innerHTML = `
                             <span class="ip-address">${ip}:</span>
                             <span class="${statusClass}"></span>
                             <span class="message">${messageText}</span>
-                        `;
-                        resultsListUl.appendChild(li);
+                        `; // Uses spans for specific styling
+
+                        resultsListUl.appendChild(li); // Add the new list item to the UL
                     });
+                } else {
+                     resultsDetailsDiv.style.display = 'none'; // Hide if no results data
                 }
-                 if(result.all_success){
-                     // Optionally clear the form on full success
-                     // form.reset();
-                     // selectedGroups.clear();
-                     // selectedIPs.clear();
-                     // groupTagsDisplay.innerHTML = '';
-                     // ipTagsDisplay.innerHTML = '';
-                     // updateHiddenInput(groupHiddenInput, selectedGroups);
-                     // updateHiddenInput(ipHiddenInput, selectedIPs);
-                 }
+
+                // Optional: Clear form only on *full* success (if desired)
+                // if(result.all_success){
+                //     form.reset();
+                //     // Clear tags etc.
+                // }
 
             } else {
                 // Handle HTTP errors (4xx, 5xx)
                 showFeedback(`Error: ${result.error || response.statusText || 'Unknown error'}`, 'error');
-                 resultsDetailsDiv.style.display = 'none';
+                 resultsDetailsDiv.style.display = 'none'; // Ensure results are hidden on error
             }
 
         } catch (error) {
+            // Handle fetch/network errors
             console.error('Fetch Error:', error);
             showFeedback(`Network or client-side error: ${error.message}`, 'error');
-             resultsDetailsDiv.style.display = 'none';
+             resultsDetailsDiv.style.display = 'none'; // Ensure results are hidden on error
         } finally {
             toggleLoading(false);
         }
-    });
+    }); // End form submit listener
 
 }); // End DOMContentLoaded

@@ -87,13 +87,24 @@ def create_user():
             return jsonify({'error': message}), 400
 
         results = {}
+        all_success = True
         for ip in ips:
             success, message = create_user_on_server(ip, username, pub_key, add_to_sudoers)
             results[ip] = {'success': success, 'message': message}
             if not success:
+                all_success = False
                 logger.error(f"Failed to create user {username} on {ip}: {message}")
+            else:
+                logger.info(f"Successfully processed user {username} on {ip}: {message}")
 
-        return jsonify(results), 200
+        response_data = {
+                'message': 'Access request processed. See details below.',
+                'results': results, 
+                'all_success': all_success
+            }
+        status_code = 200 if all_success else 207 
+
+        return jsonify(response_data), status_code
 
     except Exception as e:
         logger.exception(f"An error occurred: {str(e)}")
