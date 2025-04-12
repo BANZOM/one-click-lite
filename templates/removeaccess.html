@@ -11,12 +11,10 @@
         <a href="{{ url_for('accesspoint') }}" class="back-link">&larr; Back to AccessPoint</a>
         <h1>Remove User Access</h1>
 
-        <!-- Feedback Area (for Find Servers & Final Results) -->
         <div id="form-feedback" class="form-feedback" aria-live="polite"></div>
 
-        <!-- Stage 1: Find User -->
         <div id="find-user-stage">
-            <div class="form-group">
+             <div class="form-group">
                 <label for="username">Username to Remove</label>
                 <input type="text" id="username" name="username" class="form-input" required placeholder="e.g., aditya.01">
                 <small class="field-hint">Enter the username whose access you want to manage.</small>
@@ -29,20 +27,25 @@
             </div>
         </div>
 
-        <!-- Stage 2: Select Servers & Submit Removal (hidden initially) -->
         <form id="remove-access-form" style="display: none;">
             <h2 id="server-list-heading">Servers for user: <span id="display-username"></span></h2>
 
             <div class="form-group ip-list-container">
+                <!-- === IP Search Input Added Here === -->
+                <div class="ip-search-container">
+                     <label for="ip-search-input" class="visually-hidden">Filter IPs</label> 
+                     <input type="search" id="ip-search-input" placeholder="Filter displayed IPs..." class="form-input">
+                </div>
+                <!-- === End Search Input === -->
+
                 <div class="select-all-container">
                      <input type="checkbox" id="select-all-ips" title="Select/Deselect All">
                      <label for="select-all-ips">Select/Deselect All IPs</label>
                 </div>
                 <ul id="ip-list">
-                    <!-- JS will populate this with checkboxes -->
-                    <!-- Example: <li><input type="checkbox" id="ip-10.0.0.1" value="10.0.0.1"><label for="ip-10.0.0.1">10.0.0.1</label></li> -->
+                    <!-- JS populates this -->
                 </ul>
-                 <small class="field-hint">Select the servers from which to remove the user.</small>
+                 <small class="field-hint">Select the servers from which to remove the user. Only selected IPs will be affected.</small>
             </div>
 
             <div class="form-group submit-group">
@@ -53,7 +56,6 @@
             </div>
         </form>
 
-        <!-- Results Area (Identical structure to giveaccess.html) -->
         <div id="results-details" class="results-container" style="display: none;">
             <h2>Processing Results</h2>
             <ul id="results-list"></ul>
@@ -61,7 +63,6 @@
 
     </div>
 
-    <!-- Link the specific JS for this page -->
     <script src="{{ url_for('static', filename='js/removeaccess.js') }}"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- Get DOM Elements ---
     const findUserStage = document.getElementById('find-user-stage');
-    const removeAccessForm = document.getElementById('remove-access-form'); // This is the <form> element
+    const removeAccessForm = document.getElementById('remove-access-form');
     const usernameInput = document.getElementById('username');
     const findServersBtn = document.getElementById('find-servers-btn');
     const serverListHeading = document.getElementById('server-list-heading');
@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ipListUl = document.getElementById('ip-list');
     const selectAllCheckbox = document.getElementById('select-all-ips');
     const submitRemovalBtn = document.getElementById('submit-removal-btn');
+    const ipSearchInput = document.getElementById('ip-search-input'); // <-- Get the search input
 
     const feedbackDiv = document.getElementById('form-feedback');
     const resultsDetailsDiv = document.getElementById('results-details');
@@ -50,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ipListUl.innerHTML = ''; // Clear IP list
         usernameInput.value = ''; // Clear username input maybe? Optional.
         selectAllCheckbox.checked = false;
+        ipSearchInput.value = ''; 
         clearFeedback();
     };
 
@@ -57,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     findServersBtn.addEventListener('click', async () => {
         const username = usernameInput.value.trim();
         clearFeedback();
+        ipSearchInput.value = ''; 
         ipListUl.innerHTML = ''; // Clear previous list if any
         removeAccessForm.style.display = 'none'; // Hide form while fetching
         resultsDetailsDiv.style.display = 'none'; // Hide results
@@ -69,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleLoading(findSpinner, true);
 
         try {
-            // Use encodeURIComponent for usernames that might have special characters
             const response = await fetch(`/api/get-user-ips/${encodeURIComponent(username)}`);
             const data = await response.json();
 
@@ -89,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     removeAccessForm.style.display = 'block'; // Show the form with IPs
                     selectAllCheckbox.checked = false; // Ensure select-all is unchecked initially
+                    filterIpList();
                 } else {
                     // This case should ideally be caught by 404 below, but handle just in case
                      showFeedback(`No active servers found for username "${username}".`, 'info');
@@ -105,6 +108,32 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleLoading(findSpinner, false);
         }
     });
+
+    const filterIpList = () => {
+        const searchTerm = ipSearchInput.value.toLowerCase().trim();
+        const ipListItems = ipListUl.querySelectorAll('li');
+
+        let visibleCount = 0;
+        ipListItems.forEach(item => {
+            const label = item.querySelector('label');
+            const ipAddress = label ? label.textContent.toLowerCase() : '';
+
+            const isMatch = ipAddress.includes(searchTerm); // Simple substring match
+
+            if (isMatch) {
+                item.classList.remove('hidden-by-search');
+                visibleCount++;
+            } else {
+                item.classList.add('hidden-by-search');
+            }
+        });
+
+        if (ipListItems.length > 0 && visibleCount === 0 && searchTerm !== '') {
+            showFeedback(`No IP addresses match "${searchTerm}".`, 'info');
+        }
+    };
+
+    ipSearchInput.addEventListener('input', filterIpList);
 
     // --- Event Listener: Select/Deselect All Checkbox ---
     selectAllCheckbox.addEventListener('change', () => {
