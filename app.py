@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
-from service.csv_service import get_all_servers_for_user
+from service.csv_service import get_all_log_records, get_all_servers_for_user
 from service.remove_user import remove_user_from_server
 from utils.get_group_list import get_group_list
 from utils.validators import validate_ip, validate_username, validate_pub_key  
@@ -196,31 +196,14 @@ def remove_user():
             logger.exception(f"An error occurred during user removal POST: {str(e)}")
             return jsonify({'error': f'An unexpected server error occurred: {str(e)}'}), 500
     
-@app.route('/list-user-servers', methods=['POST'])
-def list_user_servers():
-    "API endpoint to list all the servers from username"
-    logger.info("Received /list-user-servers request")
-    try:
-        data = request.get_json()
-        if not data or 'username' not in data:  
-            message = 'Invalid request. Username is required'
-            logger.warning(message)
-            return jsonify({'error': message}), 400
+@app.route('/accesspoint/logs')
+def logs_page():
+    """Serves the page displaying the current access records by calling the CSV service."""
+    logger.info("Serving the Current Access Report (Logs) page.")
 
-        username = data.get('username')
+    log_data, error_message = get_all_log_records()
 
-        if not validate_username(username):
-            message = 'Invalid username.'
-            logger.warning(message)
-            return jsonify({'error': message}), 400
-        
-        servers = get_all_servers_for_user(username)
-
-        return jsonify(servers), 200
-    
-    except Exception as e:
-        logger.exception(f"An error occurred: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+    return render_template('logs.html', logs_data=log_data, error_message=error_message)
 
 
 

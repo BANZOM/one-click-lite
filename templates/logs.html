@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Access Report - AccessPoint</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+    <script>
+      window.logData = {{ logs_data | tojson }};
+    </script>
+</head>
+<body>
+    <div class="form-container logs-container"> 
+        <a href="{{ url_for('accesspoint') }}" class="back-link">&larr; Back to AccessPoint</a>
+        <h1>Current Access Report</h1>
+
+        {% if error_message %}
+            <div class="form-feedback error" style="display: block;">{{ error_message }}</div>
+        {% endif %}
+
+        <div class="table-responsive-wrapper"> 
+            <table id="logs-table" class="display compact stripe hover" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>IP Address</th>
+                        <th>Username</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+
+    </div> 
+
+    <!-- jQuery (required by DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- Optional: DataTables Responsive JS -->
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#logs-table').DataTable({
+                data: window.logData, 
+                columns: [
+                    { data: 'Timestamp', 
+                      render: function ( data, type, row ) {
+                          if (type === 'display' && data) {
+                              try {
+                                const date = new Date(data);
+                                return date.toLocaleString();
+                              } catch (e) {
+                                return data; 
+                              }
+                          }
+                          return data; 
+                      }
+                    },
+                    { data: 'IP Address' }, 
+                    { data: 'Username' }   
+                ],
+                // Configuration options:
+                paging: true,        // Enable pagination
+                searching: true,     // Enable search box
+                ordering: true,      // Enable sorting
+                info: true,          // Show "Showing x to y of z entries"
+                lengthChange: true, // Allow user to change number of entries shown
+                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ], // Rows per page options
+                order: [[0, 'desc']], // Default sort: Timestamp column (index 0) descending
+                responsive: true,
+                language: {
+                    search: "_INPUT_", // Just the input box
+                    searchPlaceholder: "Filter records..."
+                }
+
+            }); 
+        }); 
+    </script>
+
+</body>
+</html>

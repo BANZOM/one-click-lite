@@ -102,6 +102,52 @@ def remove_user_records_from_csv(username: str, ip: str =None):
     except Exception as e:
         logger.exception(f"An error occurred during CSV processing: {e}")
 
+def get_all_log_records():
+    """
+    Reads all records from the user_records.csv file.
+
+    Returns:
+        tuple: A tuple containing:
+            - list: A list of dictionaries representing the log records.
+            - str or None: An error message string if an error occurred, otherwise None.
+    """
+    log_data = []
+    error_message = None
+    if not os.path.exists(DATA_FILE):
+        error_message = f"Error: Log data file ({DATA_FILE}) not found."
+        logger.warning(error_message)
+        return log_data, error_message
+
+    try:
+        with open(DATA_FILE, mode='r', newline='', encoding='utf-8') as csvfile:
+            csvfile.seek(0, os.SEEK_END) 
+            file_size = csvfile.tell()  
+            if file_size == 0:
+                logger.info(f"Log file is empty: {DATA_FILE}")
+                return log_data, error_message 
+
+            csvfile.seek(0) 
+
+            reader = csv.DictReader(csvfile)
+            required_headers = ['Timestamp', 'IP Address', 'Username']
+            if not reader.fieldnames or not all(hdr in reader.fieldnames for hdr in required_headers):
+                error_message = f"Error: Log data file ({DATA_FILE}) missing required headers ({', '.join(required_headers)})."
+                logger.error(error_message)
+            else:
+                 log_data = list(reader)
+                 logger.info(f"Successfully read {len(log_data)} records from {DATA_FILE}.")
+
+    except FileNotFoundError: 
+         error_message = f"Error: Log data file ({DATA_FILE}) not found."
+         logger.warning(error_message)
+         log_data = []
+    except Exception as e:
+        error_message = f"Error: Could not read or parse log data file. Details: {e}"
+        logger.exception(f"Error reading log file {DATA_FILE}: {e}")
+        log_data = []
+
+    return log_data, error_message
+
 if __name__ == "__main__":
     # Example usage
     # write_to_csv("banzo", "127.0.0.13")
@@ -118,7 +164,8 @@ if __name__ == "__main__":
     # Test removing records
     # remove_user_records_from_csv("banzo")
     # remove_user_records_from_csv("testuser", "192.168.1.100")
-    print(get_all_servers_for_user("dev"))
+    # print(get_all_servers_for_user("dev"))
+    # print(get_all_log_records())
     pass
     
     

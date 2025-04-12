@@ -543,3 +543,149 @@ results-container {
     white-space: nowrap;
     border: 0;
 }
+
+/* --- DataTables Theme Adjustments --- */
+
+/* Container for the logs page */
+.logs-container {
+    max-width: 1200px; /* Allow logs table to be wider */
+}
+
+/* Wrapper for responsiveness */
+.table-responsive-wrapper {
+    overflow-x: auto; /* Add horizontal scroll on small screens if needed */
+    margin-top: 20px;
+}
+
+/* General table styling */
+table.dataTable {
+    border-collapse: collapse !important; /* Override default */
+    border: 1px solid #3b4048;
+    margin-bottom: 15px; /* Space below table */
+}
+
+table.dataTable thead th {
+    background-color: #2c313a; /* Dark header */
+    color: #abb2bf;
+    border-bottom: 2px solid #61afef; /* Accent border */
+    padding: 12px 18px; /* Adjust padding */
+    text-align: left;
+    font-weight: 600;
+}
+
+table.dataTable tbody td {
+    color: #abb2bf;
+    padding: 10px 18px; /* Match header horizontal padding */
+    border: 1px solid #3b4048; /* Cell borders */
+    vertical-align: middle;
+}
+
+/* Stripe styling */
+table.dataTable.stripe tbody tr.odd {
+    background-color: #21252b; /* Slightly different for odd rows */
+}
+table.dataTable.stripe tbody tr.even {
+     background-color: #282c34; /* Match container background */
+}
+
+/* Hover styling */
+table.dataTable.hover tbody tr:hover {
+    background-color: #3b4048 !important; /* Hover effect */
+    color: #ffffff;
+}
+
+/* DataTables Controls */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    margin-bottom: 15px; /* Space around controls */
+    color: #abb2bf !important; /* Text color for info/labels */
+}
+
+/* Search box */
+.dataTables_wrapper .dataTables_filter input[type="search"] {
+    background-color: #1e2127;
+    border: 1px solid #3b4048;
+    border-radius: 4px;
+    padding: 8px 10px;
+    color: #abb2bf;
+    margin-left: 5px; /* Space next to "Search:" label */
+}
+.dataTables_wrapper .dataTables_filter input[type="search"]:focus {
+    outline: none;
+    border-color: #61afef;
+    box-shadow: 0 0 0 3px rgba(97, 175, 239, 0.2);
+}
+
+/* Length Select Dropdown */
+.dataTables_wrapper .dataTables_length select {
+    background-color: #1e2127;
+    border: 1px solid #3b4048;
+    border-radius: 4px;
+    padding: 6px 25px 6px 10px; /* Adjust padding for arrow */
+    color: #abb2bf;
+    margin: 0 5px; /* Space around select */
+     /* Basic styling for dropdown arrow might be needed depending on browser */
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ABB2BF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: .65em auto;
+}
+
+
+/* Pagination Buttons */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 6px 12px;
+    margin: 0 2px;
+    border: 1px solid #3b4048;
+    background-color: #282c34;
+    color: #abb2bf !important; /* Override default link color */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #3b4048;
+    border-color: #61afef;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background-color: #61afef;
+    border-color: #61afef;
+    color: #1e2127 !important; /* Dark text on active button */
+    font-weight: bold;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+    background-color: #21252b;
+    color: #5c6370 !important; /* Muted color for disabled */
+    border-color: #3b4048;
+    cursor: default;
+}
+
+/* Sorting Icons (Needs DataTables default CSS loaded) */
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc {
+    /* Basic styling if default icons aren't visible/themed */
+     background-image: none !important; /* Remove default if overriding */
+}
+table.dataTable thead .sorting::after,
+table.dataTable thead .sorting_asc::after,
+table.dataTable thead .sorting_desc::after {
+     content: ''; /* Add custom icons via ::after */
+     display: inline-block;
+     width: 1em;
+     height: 1em;
+     margin-left: 0.5em;
+     opacity: 0.4;
+     /* background-image: url(...); customize */
+}
+table.dataTable thead .sorting_asc::after { opacity: 1; /* full opacity for active */ }
+table.dataTable thead .sorting_desc::after { opacity: 1; /* full opacity for active */ }
+
