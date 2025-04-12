@@ -30,7 +30,8 @@ def write_to_csv(username, ip):
         logger.error(f"Error writing to CSV file {DATA_FILE}: {e}")
 
 def get_all_servers_for_user(username):
-    """Gets a list of all servers a user was created on from the CSV."""
+    """"Gets a UNIQUE list of all servers a user was created on from the CSV."""
+    logger.info(f"Fetching all servers for user {username}")
     servers = set()
     try:
         with open(DATA_FILE, 'r', newline='') as csvfile:
@@ -40,6 +41,8 @@ def get_all_servers_for_user(username):
                     servers.add(row['IP Address'])
     except FileNotFoundError:
         logger.warning(f"CSV file not found: {DATA_FILE}")
+    except Exception as e:
+        logger.error(f"Error reading CSV file {DATA_FILE}: {e}")
     return list(servers)
 
 def remove_user_records_from_csv(username: str, ip: str =None):
@@ -48,8 +51,8 @@ def remove_user_records_from_csv(username: str, ip: str =None):
     If ip is None, removes ALL records for the user.
     If ip is provided, removes only records matching both username and ip.
     """
+    logger.info(f"Removing records for user {username} from {DATA_FILE}")
     records_removed = False
-
     try:
         try:
             with open(DATA_FILE, 'r', newline='') as csvfile:
@@ -115,6 +118,7 @@ if __name__ == "__main__":
     # Test removing records
     # remove_user_records_from_csv("banzo")
     # remove_user_records_from_csv("testuser", "192.168.1.100")
+    print(get_all_servers_for_user("dev"))
     pass
     
     

@@ -27,6 +27,7 @@ def remove_user_from_server(ip, username):
         if not user_exists:
             message = f"User '{username}' does not exist on {ip}"
             logger.info(message)
+            remove_user_records_from_csv(username, ip)
             return True, message 
 
         stdin, stdout, stderr = client.exec_command(f"sudo userdel -r {username}")

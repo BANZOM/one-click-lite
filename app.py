@@ -29,6 +29,26 @@ CORS(app)
 def accesspoint():
     return render_template('accesspoint.html')
 
+@app.route('/api/get-user-ips/<username>', methods=['GET'])
+def get_user_ips_api(username):
+    """API endpoint to fetch the list of IPs associated with a username."""
+    logger.info(f"API request received for IPs of user: {username}")
+    if not validate_username(username): # Validate username format first
+        logger.warning(f"Invalid username format requested: {username}")
+        return jsonify({'error': 'Invalid username format.'}), 400
+
+    try:
+        ips = get_all_servers_for_user(username)
+        if not ips:
+            logger.info(f"No servers found for username: {username}")
+            return jsonify({'message': f'No active servers found for username "{username}".'}), 404
+        else:
+            logger.info(f"Found {len(ips)} servers for user {username}: {ips}")
+            return jsonify({'ips': ips}), 200
+    except Exception as e:
+        logger.exception(f"Error fetching IPs for user {username}: {str(e)}")
+        return jsonify({'error': 'Server error retrieving IP list.'}), 500
+
 @app.route('/accesspoint/giveaccess', methods=['POST', 'GET'])
 def create_user():
     """API endpoint to create a user on multiple servers."""
@@ -39,7 +59,7 @@ def create_user():
         return render_template('giveaccess.html', available_groups=available_groups)
        
     try: 
-        logger.info("Received /create-user request")
+        logger.info("Received POST request on /accesspoint/giveaccess")
         data = request.get_json()
         if not data or 'username' not in data or 'pub_key' not in data:  
             message = 'Invalid request payload. Missing username or public key'
@@ -110,47 +130,71 @@ def create_user():
         logger.exception(f"An error occurred: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
-@app.route('/remove-user', methods=['POST'])
+@app.route('/accesspoint/removeaccess', methods=['POST', 'GET'])
 def remove_user():
     """API endpoint to remove a user from multiple servers."""
-    logger.info("Received /remove-user request")
-    try:
-        data = request.get_json()
-        if not data or 'username' not in data:  
-            message = 'Invalid request. Username is required'
-            logger.warning(message)
-            return jsonify({'error': message}), 400
-
-        username = data.get('username')
-        ips = data.get('ips', [])  
-
-        if not validate_username(username):
-            message = 'Invalid username.'
-            logger.warning(message)
-            return jsonify({'error': message}), 400
-
-        if not ips:
-            message = 'At least one IP is required'
-            logger.warning(message)
-            return jsonify({'error': message}), 400
-        
-        if ips:
-            invalid_ips = [ip for ip in ips if not validate_ip(ip)]
-            if invalid_ips:
-                message = f'Invalid IP addresses: {", ".join(invalid_ips)}'
+    if request.method == 'GET':
+        logger.info("Serving remove access form.")
+        return render_template('removeaccess.html')
+    
+    if request.method == 'POST':
+        logger.info("Received POST request on /accesspoint/removeaccess")
+        try:
+            data = request.get_json()
+            if not data or 'username' not in data or 'ips' not in data:
+                message = 'Invalid request payload. Missing username or ips list.'
                 logger.warning(message)
                 return jsonify({'error': message}), 400
+
+            username = data.get('username')
+            ips_to_remove = data.get('ips', [])
+
+            # Validation
+            if not validate_username(username):
+                message = 'Invalid username.'
+                logger.warning(message)
+                return jsonify({'error': message}), 400
+            if not isinstance(ips_to_remove, list):
+                 message = 'Invalid format for IPs - expected a list.'
+                 logger.warning(message)
+                 return jsonify({'error': message}), 400
+            if not ips_to_remove:
+                message = 'No IP addresses were selected for removal.'
+                logger.warning(message)
+                return jsonify({'error': message}), 400 # Bad request if no IPs selected
+            invalid_ips = [ip for ip in ips_to_remove if not validate_ip(ip)]
+            if invalid_ips:
+                message = f'Invalid IP address format submitted: {", ".join(invalid_ips)}'
+                logger.warning(message)
+                return jsonify({'error': message}), 400
+            # End of validation
             
-        results = {}
-        for ip in ips:
-            success, message = remove_user_from_server(ip, username)
-            results[ip] = {'success': success, 'message': message}
+            logger.info(f"Processing removal request for user : '{username}'.")
 
-        return jsonify(results), 200
+            results = {}
+            all_success = True
+            for ip in ips_to_remove:
+                success, message = remove_user_from_server(ip, username) 
+                results[ip] = {'success': success, 'message': message}
+                if not success:
+                    all_success = False
+                    logger.error(f"Failed to remove user {username} from {ip}: {message}")
+                else:
+                    logger.info(f"Successfully removed user {username} from {ip}: {message}")
+                    # NOTE: The remove_user_from_server function itself should handle updating the CSV log
 
-    except Exception as e:
-        logger.exception(f"An error occurred: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+            response_data = {
+                'message': 'User removal process completed. See details below.',
+                'results': results,
+                'all_success': all_success
+            }
+            status_code = 200 if all_success else 207 # 207 Multi-Status
+
+            return jsonify(response_data), status_code
+
+        except Exception as e:
+            logger.exception(f"An error occurred during user removal POST: {str(e)}")
+            return jsonify({'error': f'An unexpected server error occurred: {str(e)}'}), 500
     
 @app.route('/list-user-servers', methods=['POST'])
 def list_user_servers():
