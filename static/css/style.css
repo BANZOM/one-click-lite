@@ -683,3 +683,117 @@ table.dataTable thead .sorting_desc::after {
 table.dataTable thead .sorting_asc::after { opacity: 1; /* full opacity for active */ }
 table.dataTable thead .sorting_desc::after { opacity: 1; /* full opacity for active */ }
 
+
+/****************************/
+/* --- Dashboard Styles --- */
+
+.dashboard-container {
+    width: 100%;
+    max-width: 1200px; /* Adjust max-width as needed */
+    padding: 40px 20px; /* Add padding around the dashboard */
+    margin: 0 auto; /* Center the container */
+    text-align: center; /* Center heading and subtitle */
+}
+
+.dashboard-container h1 {
+    font-size: 2.8em; /* Slightly smaller than original H1 if needed */
+    color: #61afef;
+    margin-bottom: 15px; /* Less space below title */
+    font-weight: 400;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1em;
+    color: #7f8a9f; /* Muted color */
+    margin-bottom: 40px;
+}
+
+.tool-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; /* Space between cards */
+    justify-content: center; /* Center cards horizontally */
+    padding: 0; /* Remove padding if any */
+    list-style: none;
+}
+
+.tool-card {
+    background-color: #282c34; /* Card background */
+    border-radius: 8px;
+    border: 1px solid #3b4048; /* Subtle border */
+    padding: 25px 30px;
+    text-align: left; /* Align text inside card to the left */
+    text-decoration: none; /* Remove underline from link */
+    color: #abb2bf; /* Default text color */
+    width: calc(33.333% - 20px); /* Aim for 3 columns, adjust based on gap */
+    min-width: 280px; /* Minimum card width */
+    max-width: 350px; /* Maximum card width */
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+    display: flex; /* Use flex for icon + content layout */
+    flex-direction: column; /* Stack icon/content vertically */
+    align-items: center; /* Center items horizontally */
+    cursor: pointer;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px); /* Lift effect */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+    border-color: #61afef; /* Highlight border */
+}
+
+.tool-card-icon {
+    font-size: 3em; /* Large icon */
+    color: #61afef; /* Icon color */
+    margin-bottom: 20px; /* Space below icon */
+}
+
+.tool-card-content h2 {
+    font-size: 1.4em;
+    color: #c8ccd4; /* Slightly brighter heading */
+    margin-bottom: 10px;
+    font-weight: 600;
+    text-align: center; /* Center card title */
+}
+
+.tool-card-content p {
+    font-size: 0.95em;
+    line-height: 1.5;
+    color: #7f8a9f; /* Muted description color */
+    text-align: center; /* Center description */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .tool-card {
+        width: calc(50% - 15px); /* 2 columns on medium screens */
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-container h1 {
+        font-size: 2.2em;
+    }
+    .dashboard-subtitle {
+        font-size: 1em;
+        margin-bottom: 30px;
+    }
+    .tool-grid {
+        gap: 20px;
+    }
+    .tool-card {
+        width: 100%; /* 1 column on small screens */
+        max-width: 450px; /* Allow full width */
+        padding: 20px 25px;
+    }
+    .tool-card-icon {
+        font-size: 2.5em;
+        margin-bottom: 15px;
+    }
+    .tool-card-content h2 {
+        font-size: 1.3em;
+    }
+    .tool-card-content p {
+        font-size: 0.9em;
+    }
+}
