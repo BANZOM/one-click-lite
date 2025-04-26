@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title Block - Child templates will override this -->
+    <title>{% block title %}SRE Internal ToolKit{% endblock %}</title>
+    <!-- Common Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='media/favicon.png') }}" type="image/x-icon">
+    <!-- Block for extra head elements if needed by specific pages -->
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <div class="header-title">
+                <a href="{{ url_for('home') }}">SRE Internal ToolKit</a> <!-- Link back home -->
+            </div>
+            <nav class="header-nav">
+                {# --- Conditional User Section --- #}
+                {% if current_user.is_authenticated %}
+                    <span class="user-greeting">Logged in as: <strong>{{ current_user.id }}</strong></span>
+                    <a href="{{ url_for('auth.logout') }}" class="logout-button">Logout</a>
+                {% else %}
+                    <!-- Optionally add a link to login if not authenticated, though may be redundant on login page -->
+                    <!-- <a href="{{ url_for('auth.login') }}" class="login-button">Login</a> -->
+                    <span class="user-status">Not Logged In</span> <!-- Or leave empty -->
+                {% endif %}
+                {# --- End Conditional User Section --- #}
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Flash Messages Area -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages-container">
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category or 'info' }}" role="alert">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Content Block - Child templates fill this -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; {{ now().year }} Freecharge. All rights reserved.</p> <!-- Use Jinja's now() for year -->
+        <p>Made with <i class="fas fa-heart" style="color: #e06c75;"></i> By Aditya for the SRE Team.</p>
+    </footer>
+
+    <!-- Block for page-specific scripts -->
+    {% block scripts %}{% endblock %}
+
+</body>
+</html>

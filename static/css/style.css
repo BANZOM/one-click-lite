@@ -1,135 +1,371 @@
-/* Basic Reset & Body Styling */
+/* ==========================================================================
+   1. Basic Reset & Global Styles
+   ========================================================================== */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    font-size: 16px;
+    /* Base font size */
+    line-height: 1.5;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #1e2127; /* Dark background */
-    color: #abb2bf; /* Light gray text */
+    background-color: #1e2127;
+    /* Dark background */
+    color: #abb2bf;
+    /* Light gray text */
     display: flex;
-    justify-content: center;
+    /* Use flexbox for sticky footer */
+    flex-direction: column;
+    /* Stack header, main, footer */
+    min-height: 100vh;
+    /* Ensure body takes full viewport height */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #c8ccd4;
+    /* Slightly brighter default heading color */
+    font-weight: 400;
+    /* Default lighter weight */
+    line-height: 1.2;
+}
+
+a {
+    color: #61afef;
+    /* Default link color */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    filter: brightness(1.1);
+}
+
+/* ==========================================================================
+   2. Base Layout (Header, Main, Footer)
+   ========================================================================== */
+
+.app-header {
+    background-color: #2c313a;
+    /* Slightly different header background */
+    padding: 12px 25px;
+    /* Adjusted padding */
+    border-bottom: 1px solid #3b4048;
+    color: #dcdfe4;
+    /* Lighter text color for header */
+    width: 100%;
+    position: sticky;
+    /* Make header sticky */
+    top: 0;
+    z-index: 100;
+    /* Ensure header is above other content */
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    /* Space title and nav */
     align-items: center;
-    min-height: 100vh; /* Ensure takes full viewport height */
+    max-width: 1400px;
+    /* Max width for header content */
+    margin: 0 auto;
+    /* Center header content */
+}
+
+.header-title a {
+    font-size: 1.4em;
+    /* Adjusted size */
+    font-weight: 600;
+    color: #61afef;
+    /* Brand color */
+    text-decoration: none;
+}
+
+.header-title a:hover {
+    text-decoration: none;
+    /* Don't underline brand */
+    filter: brightness(1.1);
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    /* Space between nav items */
+}
+
+.user-greeting {
+    font-size: 0.9em;
+    /* Adjusted size */
+    color: #abb2bf;
+}
+
+.user-greeting strong {
+    color: #e6e6e6;
+    /* Brighter username */
+    font-weight: 600;
+}
+
+.main-content {
+    flex-grow: 1;
+    /* Allow main content to take up available space */
+    width: 100%;
+    padding: 20px 0;
+    /* Add vertical padding; horizontal padding is on inner containers */
+    align-items: center;
+    display: flex;flex-direction: column;justify-content: center; 
+}
+
+.app-footer {
+    background-color: #21252b;
+    /* Darker footer background */
+    padding: 15px 25px;
+    /* Adjusted padding */
+    border-top: 1px solid #3b4048;
+    color: #7f8a9f;
+    /* Muted text color */
+    text-align: center;
+    font-size: 0.85em;
+    /* Adjusted size */
+    width: 100%;
+    margin-top: auto;
+    /* Push footer to bottom if content is short */
+}
+
+.app-footer p {
+    margin: 3px 0;
+}
+
+/* ==========================================================================
+   3. Page/Content Containers
+   ========================================================================== */
+
+/* General container styles applied within .main-content */
+.main-container,
+/* For AccessPoint buttons */
+.form-container,
+/* For Give/Remove Access forms */
+.dashboard-container,
+/* For Home page cards */
+.logs-container
+
+/* For Logs page table */
+    {
+    width: 100%;
+    padding: 30px 25px;
+    /* Consistent internal padding */
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    /* Space below header */
+    margin-bottom: 20px;
+    /* Space above footer */
+    background-color: #282c34;
+    /* Common container background */
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Width constraints for different containers */
+.main-container {
+    max-width: 600px;
+    /* Centered button container */
+    text-align: center;
+    /* Center content within this specific container */
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+}
+
+.form-container {
+    max-width: 750px;
+    /* Width for forms */
+    position: relative;
+    /* For back link */
+    text-align: left;
+    /* Align form elements left */
+}
+
+.dashboard-container {
+    max-width: 1200px;
+    /* Wider for dashboard grid */
+    text-align: center;
+    /* Center titles and grid */
+    background-color: transparent;
+    /* Dashboard container itself is transparent */
+    box-shadow: none;
+    padding-top: 0;
+    /* Less padding at top */
+}
+
+.logs-container {
+    max-width: 1200px;
+    /* Wider for logs table */
+    text-align: left;
+    /* Align text left */
+}
+
+/* Container Specific Heading Styles */
+.main-container h1,
+.form-container h1,
+.logs-container h1 {
+    color: #61afef;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    font-weight: 400;
     text-align: center;
 }
 
-/* Container for Centering Content */
-.main-container {
-    padding: 20px;
+.dashboard-container h1 {
+    font-size: 2.8em;
+    color: #61afef;
+    margin-bottom: 15px;
+    font-weight: 400;
 }
 
-/* Heading Style */
-h1 {
-    color: #61afef; /* A nice blue for the heading */
-    margin-bottom: 40px; /* Space below heading */
-    font-size: 3em; /* Large heading */
-    font-weight: 300; /* Lighter font weight */
+.dashboard-subtitle {
+    font-size: 1.1em;
+    color: #7f8a9f;
+    margin-bottom: 40px;
 }
 
-/* Button Container for Vertical Layout */
-.button-container {
-    display: flex;
-    flex-direction: column; /* Stack buttons vertically */
-    align-items: center; /* Center buttons horizontally within the column */
-}
-
-/* Shared Button Styles (Applied to <a> tags now) */
-.access-button {
-    display: block; /* Ensure links take up width like buttons */
-    width: 250px; /* Fixed width for consistency */
-    padding: 20px 30px; /* Generous padding for large size */
-    margin-bottom: 20px; /* Space between buttons */
-    font-size: 1.2em; /* Larger font size */
-    font-weight: 600;
-    border: none;
-    border-radius: 8px; /* Slightly rounded corners */
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease; /* Smooth transitions */
-    color: #ffffff; /* White text on buttons */
-    text-decoration: none; /* REMOVE default link underline */
-    text-align: center; /* Ensure text is centered */
-}
-
-/* Remove margin from the last button */
-.access-button:last-child {
-    margin-bottom: 0;
-}
-
-/* Specific Button Colors (Example) */
-.access-button.primary {
-    background-color: #61afef; /* Blue */
-}
-
-.access-button.secondary {
-    background-color: #e06c75; /* Red/Coral */
-}
-
-.access-button.tertiary {
-    background-color: #98c379; /* Green */
-}
-
-/* Hover & Active States */
-.access-button:hover {
-    filter: brightness(1.1); /* Slightly brighten on hover */
-    text-decoration: none; /* Ensure underline doesn't reappear on hover */
-}
-
-.access-button:active {
-    transform: scale(0.98); /* Slightly shrink when clicked */
-    filter: brightness(0.95);
-}
-
-/* Basic Responsiveness */
-@media (max-width: 600px) {
-    h1 {
-        font-size: 2.5em;
-        margin-bottom: 30px;
-    }
-    .access-button {
-        width: 80%; /* Make buttons wider on smaller screens */
-        max-width: 300px; /* But not excessively wide */
-        padding: 18px 25px;
-        font-size: 1.1em;
-    }
-}
-
-
-/* --- Give Access Form Styles --- */
-
-.form-container {
-    background-color: #282c34; /* Slightly lighter than body for contrast */
-    padding: 30px 40px;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    width: 100%;
-    max-width: 700px; /* Max width for the form */
-    margin: 20px;
-    text-align: left; /* Align text left within the form */
-    position: relative; /* For absolute positioning of back link */
-}
-
+/* Back Link (specific to form-container) */
 .back-link {
     position: absolute;
-    top: 15px;
-    left: 15px;
+    top: 20px;
+    /* Adjusted position */
+    left: 25px;
     color: #61afef;
     text-decoration: none;
     font-size: 0.9em;
 }
+
 .back-link:hover {
     text-decoration: underline;
 }
 
-.form-container h1 {
-    text-align: center; /* Center heading */
-    color: #61afef;
-    margin-bottom: 30px;
-    font-weight: 400;
+/* ==========================================================================
+   4. Common Components
+   ========================================================================== */
+
+/* --- Buttons --- */
+.access-button {
+    display: inline-block;
+    /* Changed from block */
+    width: auto;
+    /* Let padding determine width */
+    min-width: 150px;
+    /* Ensure minimum size */
+    padding: 12px 25px;
+    /* Adjusted padding */
+    margin-bottom: 15px;
+    /* Adjusted margin */
+    font-size: 1em;
+    /* Adjusted font size */
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    /* Slightly smaller radius */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease, filter 0.3s ease;
+    color: #ffffff;
+    text-decoration: none;
+    text-align: center;
+    line-height: 1.4;
+    /* Ensure text vertical alignment */
 }
 
+.access-button:last-child {
+    margin-bottom: 0;
+}
+
+/* Button Colors */
+.access-button.primary {
+    background-color: #61afef;
+}
+
+/* Blue */
+.access-button.secondary {
+    background-color: #e06c75;
+}
+
+/* Red/Coral */
+.access-button.tertiary {
+    background-color: #98c379;
+}
+
+/* Green */
+.access-button.danger {
+    background-color: #e06c75;
+}
+
+/* Red alias */
+
+/* Button Hover/Active */
+.access-button:hover {
+    filter: brightness(1.15);
+    text-decoration: none;
+}
+
+.access-button:active {
+    transform: scale(0.98);
+    filter: brightness(0.95);
+}
+
+.logout-button {
+    /* Inherits some styles but needs specifics */
+    display: inline-block;
+    padding: 7px 14px;
+    /* Smaller padding */
+    font-size: 0.9em;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, filter 0.3s ease;
+    color: #ffffff;
+    text-decoration: none;
+    text-align: center;
+    background-color: #c678dd;
+    /* Violet for logout */
+}
+
+.logout-button:hover {
+    filter: brightness(1.15);
+    text-decoration: none;
+}
+
+.access-button .spinner {
+    display: inline-block;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    width: 14px;
+    /* Smaller spinner */
+    height: 14px;
+    animation: spin 1s ease-infinite;
+    margin-left: 8px;
+    /* Adjusted margin */
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- Forms --- */
 .form-group {
     margin-bottom: 25px;
 }
@@ -145,11 +381,12 @@ h1 {
 .form-input,
 textarea.form-input {
     width: 100%;
-    padding: 12px 15px;
-    background-color: #1e2127; /* Dark input background */
-    border: 1px solid #3b4048; /* Subtle border */
+    padding: 10px 12px;
+    /* Adjusted padding */
+    background-color: #1e2127;
+    border: 1px solid #3b4048;
     border-radius: 5px;
-    color: #abb2bf; /* Input text color */
+    color: #abb2bf;
     font-size: 1em;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -157,109 +394,141 @@ textarea.form-input {
 .form-input:focus,
 textarea.form-input:focus {
     outline: none;
-    border-color: #61afef; /* Highlight focus */
+    border-color: #61afef;
     box-shadow: 0 0 0 3px rgba(97, 175, 239, 0.2);
 }
 
 textarea.form-input {
-    resize: vertical; /* Allow vertical resize only */
+    resize: vertical;
     min-height: 100px;
-    font-family: 'Courier New', Courier, monospace; /* Monospace for keys */
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .field-hint {
     display: block;
     font-size: 0.85em;
-    color: #7f8a9f; /* Muted color for hints */
+    color: #7f8a9f;
     margin-top: 5px;
 }
 
-/* Checkbox Styles */
 .checkbox-group {
     display: flex;
     align-items: center;
-    margin-top: 10px; /* Adjust spacing */
+    margin-top: 10px;
 }
 
 .checkbox-group input[type="checkbox"] {
     margin-right: 10px;
-    width: 18px;
-    height: 18px;
-    accent-color: #61afef; /* Color the checkmark */
+    width: 16px;
+    /* Adjusted size */
+    height: 16px;
+    accent-color: #61afef;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .checkbox-group label.checkbox-label {
-    margin-bottom: 0; /* Override default label margin */
-    font-weight: normal; /* Normal weight for checkbox label */
+    margin-bottom: 0;
+    font-weight: normal;
     font-size: 1em;
     cursor: pointer;
 }
+
 .checkbox-group .field-hint {
-    margin-left: 28px; /* Align hint under the label text */
+    margin-left: 26px;
     margin-top: 2px;
 }
 
-/* --- Tag Input Styles --- */
+.submit-group {
+    text-align: right;
+    margin-top: 30px;
+}
+
+/* Align button left for login form specifically */
+.login-container .submit-group {
+    text-align: left;
+}
+
+.login-container .access-button {
+    width: 100%;
+    /* Make login button full width */
+}
+
+/* --- Tag Input --- */
 .tag-input-container {
     display: flex;
-    flex-wrap: wrap; /* Allow tags to wrap */
+    flex-wrap: wrap;
     align-items: center;
-    padding: 5px 10px; /* Padding inside the container */
+    padding: 5px 10px;
     background-color: #1e2127;
     border: 1px solid #3b4048;
     border-radius: 5px;
-    min-height: 46px; /* Match input height */
-    cursor: text; /* Indicate text input */
+    min-height: 44px;
+    /* Match input height */
+    cursor: text;
 }
-.tag-input-container:focus-within { /* Style container when child input has focus */
-     border-color: #61afef;
-     box-shadow: 0 0 0 3px rgba(97, 175, 239, 0.2);
+
+.tag-input-container:focus-within {
+    border-color: #61afef;
+    box-shadow: 0 0 0 3px rgba(97, 175, 239, 0.2);
 }
 
 ul.tags-display {
-    display: contents; /* Make UL act like its children are direct descendants for flex */
+    display: contents;
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
 .tag {
-    display: inline-flex; /* Use flex for alignment within tag */
+    display: inline-flex;
     align-items: center;
-    background-color: #61afef; /* Blue tags */
-    color: #1e2127; /* Dark text on tag */
-    padding: 5px 10px;
+    color: #1e2127;
+    padding: 4px 9px;
+    /* Adjusted padding */
     border-radius: 4px;
-    margin: 3px 5px 3px 0; /* Spacing around tags */
+    margin: 3px 5px 3px 0;
     font-size: 0.9em;
     font-weight: 500;
 }
-/* Different color for IP tags? Optional */
-#ip-tag-container .tag {
-    background-color: #98c379; /* Green tags for IPs */
+
+/* Tag Colors */
+#group-tag-container .tag {
+    background-color: #61afef;
 }
 
+/* Blue for Groups */
+#ip-tag-container .tag {
+    background-color: #98c379;
+}
+
+/* Green for IPs */
+
 .tag-remove {
-    margin-left: 8px;
+    margin-left: 6px;
+    /* Adjusted margin */
     cursor: pointer;
     font-weight: bold;
     font-size: 1.1em;
     line-height: 1;
     padding: 0 2px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
 }
+
 .tag-remove:hover {
-    color: #e06c75; /* Reddish color on hover */
+    color: #e06c75;
+    opacity: 1;
 }
 
 input.tag-text-input {
-    flex-grow: 1; /* Take remaining space */
+    flex-grow: 1;
     border: none;
     outline: none;
-    padding: 8px 5px; /* Padding for the typing area */
-    background-color: transparent; /* Inherit container background */
+    padding: 8px 5px;
+    background-color: transparent;
     color: #abb2bf;
-    min-width: 150px; /* Ensure minimum typing space */
+    min-width: 150px;
     font-size: 1em;
 }
 
@@ -271,81 +540,117 @@ input.tag-text-input {
     background-color: #2c313a;
     border: 1px solid #3b4048;
     border-radius: 5px;
-    max-height: 150px; /* Limit height */
-    overflow-y: auto; /* Add scroll if needed */
-    position: absolute; /* Position relative to form-group */
-    width: calc(100% - 2px); /* Match container width minus borders */
-    z-index: 10; /* Appear above other elements */
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    /* Position relative to form-group containing it */
+    width: 100%;
+    /* Match input width */
+    z-index: 20;
+    /* Above tags */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    display: none; /* Hidden by default */
+    display: none;
 }
 
 .suggestion-item {
-    padding: 10px 15px;
+    padding: 8px 12px;
+    /* Adjusted padding */
     color: #abb2bf;
     cursor: pointer;
     border-bottom: 1px solid #3b4048;
 }
+
 .suggestion-item:last-child {
     border-bottom: none;
 }
 
 .suggestion-item:hover,
-.suggestion-item.active { /* Style for hover/keyboard nav */
+.suggestion-item.active {
     background-color: #61afef;
     color: #1e2127;
 }
 
-/* Submit Button & Loading */
-.submit-group {
-    text-align: right; /* Align button to the right */
-    margin-top: 30px;
+/* --- Flash Messages & Feedback --- */
+.flash-messages-container {
+    max-width: 750px;
+    /* Match typical container width */
+    margin: 15px auto -5px auto;
+    /* Position near top */
+    padding: 0 25px;
+    /* Match container padding */
+    width: 100%;
 }
 
-.access-button .spinner {
-    display: inline-block;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    width: 16px;
-    height: 16px;
-    animation: spin 1s ease-infinite;
-    margin-left: 10px;
-    vertical-align: middle;
+.alert {
+    /* General alert style */
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    font-size: 0.95em;
+    opacity: 0.95;
+    text-align: left;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.alert-danger {
+    color: #e06c75;
+    background-color: rgba(224, 108, 117, 0.15);
+    border-color: rgba(224, 108, 117, 0.3);
 }
 
-/* Feedback and Results Styles */
+.alert-warning {
+    color: #d19a66;
+    background-color: rgba(209, 154, 102, 0.15);
+    border-color: rgba(209, 154, 102, 0.3);
+}
+
+.alert-success {
+    color: #98c379;
+    background-color: rgba(152, 195, 121, 0.15);
+    border-color: rgba(152, 195, 121, 0.3);
+}
+
+.alert-info {
+    color: #61afef;
+    background-color: rgba(97, 175, 239, 0.15);
+    border-color: rgba(97, 175, 239, 0.3);
+}
+
+/* Form Feedback (inside forms) */
 .form-feedback {
-    padding: 12px 15px;
+    padding: 10px 15px;
+    /* Adjusted padding */
     margin-bottom: 20px;
     border-radius: 5px;
-    font-size: 0.95em;
-    display: none; /* Hidden by default */
+    font-size: 0.9em;
+    /* Adjusted size */
+    display: none;
+    /* Hidden by default */
 }
+
 .form-feedback.success {
-    background-color: rgba(152, 195, 121, 0.2); /* Green tint */
+    background-color: rgba(152, 195, 121, 0.2);
     color: #98c379;
     border: 1px solid #98c379;
     display: block;
 }
+
 .form-feedback.error {
-    background-color: rgba(224, 108, 117, 0.2); /* Red tint */
+    background-color: rgba(224, 108, 117, 0.2);
     color: #e06c75;
     border: 1px solid #e06c75;
     display: block;
 }
+
 .form-feedback.info {
-    background-color: rgba(97, 175, 239, 0.2); /* Blue tint */
+    background-color: rgba(97, 175, 239, 0.2);
     color: #61afef;
     border: 1px solid #61afef;
     display: block;
 }
 
-results-container {
+/* --- Results Display --- */
+.results-container {
     margin-top: 30px;
     padding: 20px;
     background-color: #1e2127;
@@ -357,6 +662,8 @@ results-container {
     color: #61afef;
     margin-bottom: 15px;
     font-weight: 400;
+    font-size: 1.2em;
+    /* Adjusted size */
     border-bottom: 1px solid #3b4048;
     padding-bottom: 10px;
 }
@@ -365,19 +672,20 @@ results-container {
     list-style: none;
     padding: 0;
     margin: 0;
-    max-height: 300px; /* Or adjust as needed */
-    overflow-y: auto; /* Scroll for long lists */
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 #results-list li {
     padding: 8px 0;
     border-bottom: 1px dashed #3b4048;
     font-size: 0.9em;
-    line-height: 1.4; /* Improve readability */
-    display: flex; /* Use flex for better alignment */
-    flex-wrap: wrap; /* Allow wrapping if message is long */
-    align-items: flex-start; /* Align items to the top */
+    line-height: 1.4;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
 }
+
 #results-list li:last-child {
     border-bottom: none;
 }
@@ -385,59 +693,146 @@ results-container {
 #results-list .ip-address {
     font-weight: bold;
     color: #abb2bf;
-    min-width: 140px; /* Adjust as needed for alignment */
-    margin-right: 10px; /* Space between IP and status */
-    flex-shrink: 0; /* Don't let IP shrink */
+    min-width: 140px;
+    margin-right: 10px;
+    flex-shrink: 0;
 }
 
 #results-list .status-success,
 #results-list .status-failure {
     font-weight: bold;
-    margin-right: 10px; /* Space between status and message */
-    flex-shrink: 0; /* Don't let status shrink */
+    margin-right: 10px;
+    flex-shrink: 0;
 }
 
-#results-list .status-success { color: #98c379; } /* Green */
-#results-list .status-failure { color: #e06c75; } /* Red */
+#results-list .status-success {
+    color: #98c379;
+}
 
-/* Add icons using ::before */
+#results-list .status-failure {
+    color: #e06c75;
+}
+
 #results-list .status-success::before {
-     content: '✔ '; /* Checkmark */
-     font-weight: bold; /* Make icon bold too */
+    content: '✔ ';
+    font-weight: bold;
 }
+
 #results-list .status-failure::before {
-     content: '✖ '; /* Cross */
-     font-weight: bold;
+    content: '✖ ';
+    font-weight: bold;
 }
 
 #results-list .message {
-    color: #7f8a9f; /* Muted color for message */
-    /* Let the message take remaining space */
+    color: #7f8a9f;
     flex-grow: 1;
 }
 
-/* --- Remove Access Page Specific Styles --- */
 
+/* ==========================================================================
+   5. Page Specific Styles & Components
+   ========================================================================== */
+
+/* --- AccessPoint Page (Button Layout) --- */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button-container .access-button {
+    /* Specific adjustments for these buttons */
+    width: 280px;
+    /* Wider buttons here */
+    padding: 18px 30px;
+    /* Generous padding */
+    font-size: 1.1em;
+    /* Larger font */
+    margin-bottom: 20px;
+}
+
+/* --- Dashboard Page (Tool Cards) --- */
+.tool-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    padding: 0;
+    list-style: none;
+}
+
+.tool-card {
+    background-color: #282c34;
+    border-radius: 8px;
+    border: 1px solid #3b4048;
+    padding: 25px 30px;
+    text-align: left;
+    text-decoration: none;
+    color: #abb2bf;
+    width: calc(33.333% - 20px);
+    /* Adjust calc for gap: (100% - (NumColumns-1) * Gap) / NumColumns */
+    min-width: 280px;
+    max-width: 350px;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    border-color: #61afef;
+}
+
+.tool-card-icon {
+    font-size: 3em;
+    color: #61afef;
+    margin-bottom: 20px;
+}
+
+.tool-card-content h2 {
+    font-size: 1.3em;
+    color: #c8ccd4;
+    margin-bottom: 10px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.tool-card-content p {
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: #7f8a9f;
+    text-align: center;
+}
+
+/* --- Remove Access Page (IP List) --- */
 #remove-access-form h2 {
-    font-size: 1.4em;
+    font-size: 1.3em;
+    /* Adjusted size */
     color: #abb2bf;
     margin-bottom: 20px;
     font-weight: 400;
     border-bottom: 1px solid #3b4048;
     padding-bottom: 10px;
 }
+
 #remove-access-form h2 #display-username {
     font-weight: 600;
-    color: #e06c75; /* Use a distinct color for the username */
+    color: #e06c75;
 }
 
-
 .ip-list-container {
-    background-color: #1e2127; /* Slightly darker background for the list area */
+    background-color: #1e2127;
     padding: 15px;
     border-radius: 5px;
     border: 1px solid #3b4048;
     margin-bottom: 25px;
+}
+
+.ip-search-container {
+    margin-bottom: 15px;
 }
 
 .select-all-container {
@@ -449,15 +844,12 @@ results-container {
 }
 
 .select-all-container input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    margin-right: 10px;
     accent-color: #61afef;
-    cursor: pointer;
 }
 
+/* Blue for select all */
 .select-all-container label {
-    margin-bottom: 0; /* Override default */
+    margin-bottom: 0;
     font-weight: 500;
     font-size: 0.95em;
     color: #abb2bf;
@@ -468,174 +860,133 @@ results-container {
     list-style: none;
     padding: 0;
     margin: 0;
-    max-height: 300px; /* Limit height and allow scroll */
+    max-height: 300px;
     overflow-y: auto;
 }
 
 #ip-list li {
     display: flex;
     align-items: center;
-    padding: 8px 5px; /* Padding for list items */
+    padding: 6px 5px;
     border-radius: 3px;
     transition: background-color 0.2s ease;
 }
-#ip-list li:hover {
-     background-color: #2c313a; /* Subtle hover */
-}
 
+#ip-list li:hover {
+    background-color: #2c313a;
+}
 
 #ip-list input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
+    accent-color: #e06c75;
     margin-right: 12px;
-    accent-color: #e06c75; /* Use danger color for remove action */
-    cursor: pointer;
-    flex-shrink: 0; /* Prevent checkbox shrinking */
 }
 
+/* Red for individual remove */
 #ip-list label {
     margin-bottom: 0;
     font-size: 1em;
     color: #abb2bf;
     cursor: pointer;
-    font-family: 'Courier New', Courier, monospace; /* Monospace looks good for IPs */
-    flex-grow: 1; /* Allow label to take space */
-}
-
-/* Style for the final remove button */
-.access-button.danger {
-    background-color: #e06c75; /* Red for removal */
-}
-.access-button.danger:hover {
-    background-color: #d7606a;
-    filter: brightness(1.1);
-}
-.access-button.danger:active {
-    background-color: #c95862;
-    transform: scale(0.98);
-    filter: brightness(0.95);
-}
-
-/* Ensure spinners on secondary buttons look okay */
-.access-button.secondary .spinner {
-     border-top-color: #fff;
-}
-.access-button.danger .spinner {
-     border-top-color: #fff;
-}
-
-.ip-search-container {
-    margin-bottom: 15px; 
+    font-family: 'Courier New', Courier, monospace;
+    flex-grow: 1;
 }
 
 #ip-list li.hidden-by-search {
     display: none;
 }
 
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+/* --- Login Page Specific --- */
+.login-container {
+    /* Inherits .form-container */
+    max-width: 450px;
+    /* Smaller width */
 }
 
-/* --- DataTables Theme Adjustments --- */
+/* ==========================================================================
+   6. DataTables Theme Adjustments
+   ========================================================================== */
 
-/* Container for the logs page */
-.logs-container {
-    max-width: 1200px; /* Allow logs table to be wider */
-}
-
-/* Wrapper for responsiveness */
 .table-responsive-wrapper {
-    overflow-x: auto; /* Add horizontal scroll on small screens if needed */
+    overflow-x: auto;
     margin-top: 20px;
 }
 
-/* General table styling */
 table.dataTable {
-    border-collapse: collapse !important; /* Override default */
+    border-collapse: collapse !important;
     border: 1px solid #3b4048;
-    margin-bottom: 15px; /* Space below table */
+    margin-bottom: 15px;
+    width: 100% !important;
+    /* Ensure full width */
 }
 
 table.dataTable thead th {
-    background-color: #2c313a; /* Dark header */
+    background-color: #2c313a;
     color: #abb2bf;
-    border-bottom: 2px solid #61afef; /* Accent border */
-    padding: 12px 18px; /* Adjust padding */
+    border-bottom: 2px solid #61afef;
+    padding: 12px 15px;
     text-align: left;
     font-weight: 600;
 }
 
 table.dataTable tbody td {
     color: #abb2bf;
-    padding: 10px 18px; /* Match header horizontal padding */
-    border: 1px solid #3b4048; /* Cell borders */
+    padding: 10px 15px;
+    border: 1px solid #3b4048;
     vertical-align: middle;
 }
 
-/* Stripe styling */
 table.dataTable.stripe tbody tr.odd {
-    background-color: #21252b; /* Slightly different for odd rows */
-}
-table.dataTable.stripe tbody tr.even {
-     background-color: #282c34; /* Match container background */
+    background-color: #21252b;
 }
 
-/* Hover styling */
+table.dataTable.stripe tbody tr.even {
+    background-color: #282c34;
+}
+
 table.dataTable.hover tbody tr:hover {
-    background-color: #3b4048 !important; /* Hover effect */
+    background-color: #3b4048 !important;
     color: #ffffff;
 }
 
-/* DataTables Controls */
 .dataTables_wrapper .dataTables_length,
 .dataTables_wrapper .dataTables_filter,
 .dataTables_wrapper .dataTables_info,
 .dataTables_wrapper .dataTables_paginate {
-    margin-bottom: 15px; /* Space around controls */
-    color: #abb2bf !important; /* Text color for info/labels */
+    margin-bottom: 15px;
+    color: #abb2bf !important;
 }
 
-/* Search box */
 .dataTables_wrapper .dataTables_filter input[type="search"] {
     background-color: #1e2127;
     border: 1px solid #3b4048;
     border-radius: 4px;
     padding: 8px 10px;
     color: #abb2bf;
-    margin-left: 5px; /* Space next to "Search:" label */
+    margin-left: 5px;
 }
+
 .dataTables_wrapper .dataTables_filter input[type="search"]:focus {
     outline: none;
     border-color: #61afef;
     box-shadow: 0 0 0 3px rgba(97, 175, 239, 0.2);
 }
 
-/* Length Select Dropdown */
 .dataTables_wrapper .dataTables_length select {
     background-color: #1e2127;
     border: 1px solid #3b4048;
     border-radius: 4px;
-    padding: 6px 25px 6px 10px; /* Adjust padding for arrow */
+    padding: 6px 25px 6px 10px;
     color: #abb2bf;
-    margin: 0 5px; /* Space around select */
+    margin: 0 5px;
     cursor: pointer;
 }
 
-/* Pagination Buttons */
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     padding: 6px 12px;
     margin: 0 2px;
     border: 1px solid #3b4048;
     background-color: #282c34;
-    color: #abb2bf !important; /* Override default link color */
+    color: #abb2bf !important;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s ease, border-color 0.2s ease;
@@ -650,150 +1001,187 @@ table.dataTable.hover tbody tr:hover {
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
     background-color: #61afef;
     border-color: #61afef;
-    color: #1e2127 !important; /* Dark text on active button */
+    color: #1e2127 !important;
     font-weight: bold;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
     background-color: #21252b;
-    color: #5c6370 !important; /* Muted color for disabled */
+    color: #5c6370 !important;
     border-color: #3b4048;
     cursor: default;
 }
 
-/* Sorting Icons (Needs DataTables default CSS loaded) */
-table.dataTable thead .sorting,
-table.dataTable thead .sorting_asc,
-table.dataTable thead .sorting_desc {
-    /* Basic styling if default icons aren't visible/themed */
-     background-image: none !important; /* Remove default if overriding */
-}
 table.dataTable thead .sorting::after,
 table.dataTable thead .sorting_asc::after,
 table.dataTable thead .sorting_desc::after {
-     content: ''; /* Add custom icons via ::after */
-     display: inline-block;
-     width: 1em;
-     height: 1em;
-     margin-left: 0.5em;
-     opacity: 0.4;
-     /* background-image: url(...); customize */
-}
-table.dataTable thead .sorting_asc::after { opacity: 1; /* full opacity for active */ }
-table.dataTable thead .sorting_desc::after { opacity: 1; /* full opacity for active */ }
-
-
-/****************************/
-/* --- Dashboard Styles --- */
-
-.dashboard-container {
-    width: 100%;
-    max-width: 1200px; /* Adjust max-width as needed */
-    padding: 40px 20px; /* Add padding around the dashboard */
-    margin: 0 auto; /* Center the container */
-    text-align: center; /* Center heading and subtitle */
+    content: '';
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-left: 0.5em;
+    opacity: 0.4;
+    /* Add background images for arrows if needed */
 }
 
-.dashboard-container h1 {
-    font-size: 2.8em; /* Slightly smaller than original H1 if needed */
-    color: #61afef;
-    margin-bottom: 15px; /* Less space below title */
-    font-weight: 400;
+table.dataTable thead .sorting_asc::after {
+    opacity: 1;
 }
 
-.dashboard-subtitle {
-    font-size: 1.1em;
-    color: #7f8a9f; /* Muted color */
-    margin-bottom: 40px;
+table.dataTable thead .sorting_desc::after {
+    opacity: 1;
 }
 
-.tool-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px; /* Space between cards */
-    justify-content: center; /* Center cards horizontally */
-    padding: 0; /* Remove padding if any */
-    list-style: none;
+/* ==========================================================================
+   7. Utility Classes
+   ========================================================================== */
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
-.tool-card {
-    background-color: #282c34; /* Card background */
-    border-radius: 8px;
-    border: 1px solid #3b4048; /* Subtle border */
-    padding: 25px 30px;
-    text-align: left; /* Align text inside card to the left */
-    text-decoration: none; /* Remove underline from link */
-    color: #abb2bf; /* Default text color */
-    width: calc(33.333% - 20px); /* Aim for 3 columns, adjust based on gap */
-    min-width: 280px; /* Minimum card width */
-    max-width: 350px; /* Maximum card width */
-    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
-    display: flex; /* Use flex for icon + content layout */
-    flex-direction: column; /* Stack icon/content vertically */
-    align-items: center; /* Center items horizontally */
-    cursor: pointer;
-}
+/* ==========================================================================
+   8. Responsive Adjustments
+   ========================================================================== */
 
-.tool-card:hover {
-    transform: translateY(-5px); /* Lift effect */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
-    border-color: #61afef; /* Highlight border */
-}
-
-.tool-card-icon {
-    font-size: 3em; /* Large icon */
-    color: #61afef; /* Icon color */
-    margin-bottom: 20px; /* Space below icon */
-}
-
-.tool-card-content h2 {
-    font-size: 1.4em;
-    color: #c8ccd4; /* Slightly brighter heading */
-    margin-bottom: 10px;
-    font-weight: 600;
-    text-align: center; /* Center card title */
-}
-
-.tool-card-content p {
-    font-size: 0.95em;
-    line-height: 1.5;
-    color: #7f8a9f; /* Muted description color */
-    text-align: center; /* Center description */
-}
-
-/* Responsive Adjustments */
 @media (max-width: 992px) {
     .tool-card {
-        width: calc(50% - 15px); /* 2 columns on medium screens */
+        width: calc(50% - 15px);
+        /* 2 columns */
         max-width: 400px;
+    }
+
+    .logs-container,
+    .dashboard-container {
+        max-width: 95%;
+        /* Allow slightly wider containers */
+    }
+
+    .header-container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-title a {
+        font-size: 1.2em;
+    }
+
+    .header-nav {
+        gap: 10px;
+    }
+
+    .user-greeting {
+        font-size: 0.85em;
+    }
+
+    .logout-button {
+        padding: 6px 10px;
+        font-size: 0.85em;
+    }
+
+    .main-container h1,
+    .form-container h1,
+    .logs-container h1 {
+        font-size: 1.8em;
+    }
+
+    .dashboard-container h1 {
+        font-size: 2.2em;
+    }
+
+    .form-container {
+        max-width: 95%;
+        padding: 25px 20px;
+    }
+
+    .button-container .access-button {
+        width: 90%;
+        max-width: 320px;
     }
 }
 
 @media (max-width: 600px) {
-    .dashboard-container h1 {
-        font-size: 2.2em;
+    body {
+        font-size: 15px;
     }
-    .dashboard-subtitle {
-        font-size: 1em;
-        margin-bottom: 30px;
+
+    /* Slightly smaller base font */
+    .app-header {
+        padding: 10px 15px;
     }
-    .tool-grid {
-        gap: 20px;
+
+    .header-container {
+        flex-direction: column;
+        gap: 10px;
     }
+
+    /* Stack header items */
+    .main-content {
+        padding-top: 10px;
+    }
+
+    .main-container,
+    .form-container,
+    .dashboard-container,
+    .logs-container {
+        padding: 20px 15px;
+        /* Reduce padding on small screens */
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
     .tool-card {
-        width: 100%; /* 1 column on small screens */
-        max-width: 450px; /* Allow full width */
+        width: 100%;
+        /* 1 column */
+        max-width: 450px;
         padding: 20px 25px;
     }
+
     .tool-card-icon {
         font-size: 2.5em;
         margin-bottom: 15px;
     }
+
     .tool-card-content h2 {
-        font-size: 1.3em;
+        font-size: 1.2em;
     }
+
     .tool-card-content p {
         font-size: 0.9em;
+    }
+
+    .button-container .access-button {
+        width: 90%;
+        padding: 15px 20px;
+        font-size: 1em;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .submit-group {
+        text-align: center;
+    }
+
+    /* Center submit buttons */
+    .submit-group .access-button {
+        width: 100%;
+    }
+
+    .back-link {
+        top: 10px;
+        left: 15px;
     }
 }
