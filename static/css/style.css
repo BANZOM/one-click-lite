@@ -1,0 +1,799 @@
+/* Basic Reset & Body Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1e2127; /* Dark background */
+    color: #abb2bf; /* Light gray text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensure takes full viewport height */
+    text-align: center;
+}
+
+/* Container for Centering Content */
+.main-container {
+    padding: 20px;
+}
+
+/* Heading Style */
+h1 {
+    color: #61afef; /* A nice blue for the heading */
+    margin-bottom: 40px; /* Space below heading */
+    font-size: 3em; /* Large heading */
+    font-weight: 300; /* Lighter font weight */
+}
+
+/* Button Container for Vertical Layout */
+.button-container {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center buttons horizontally within the column */
+}
+
+/* Shared Button Styles (Applied to <a> tags now) */
+.access-button {
+    display: block; /* Ensure links take up width like buttons */
+    width: 250px; /* Fixed width for consistency */
+    padding: 20px 30px; /* Generous padding for large size */
+    margin-bottom: 20px; /* Space between buttons */
+    font-size: 1.2em; /* Larger font size */
+    font-weight: 600;
+    border: none;
+    border-radius: 8px; /* Slightly rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease; /* Smooth transitions */
+    color: #ffffff; /* White text on buttons */
+    text-decoration: none; /* REMOVE default link underline */
+    text-align: center; /* Ensure text is centered */
+}
+
+/* Remove margin from the last button */
+.access-button:last-child {
+    margin-bottom: 0;
+}
+
+/* Specific Button Colors (Example) */
+.access-button.primary {
+    background-color: #61afef; /* Blue */
+}
+
+.access-button.secondary {
+    background-color: #e06c75; /* Red/Coral */
+}
+
+.access-button.tertiary {
+    background-color: #98c379; /* Green */
+}
+
+/* Hover & Active States */
+.access-button:hover {
+    filter: brightness(1.1); /* Slightly brighten on hover */
+    text-decoration: none; /* Ensure underline doesn't reappear on hover */
+}
+
+.access-button:active {
+    transform: scale(0.98); /* Slightly shrink when clicked */
+    filter: brightness(0.95);
+}
+
+/* Basic Responsiveness */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2.5em;
+        margin-bottom: 30px;
+    }
+    .access-button {
+        width: 80%; /* Make buttons wider on smaller screens */
+        max-width: 300px; /* But not excessively wide */
+        padding: 18px 25px;
+        font-size: 1.1em;
+    }
+}
+
+
+/* --- Give Access Form Styles --- */
+
+.form-container {
+    background-color: #282c34; /* Slightly lighter than body for contrast */
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 700px; /* Max width for the form */
+    margin: 20px;
+    text-align: left; /* Align text left within the form */
+    position: relative; /* For absolute positioning of back link */
+}
+
+.back-link {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: #61afef;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.form-container h1 {
+    text-align: center; /* Center heading */
+    color: #61afef;
+    margin-bottom: 30px;
+    font-weight: 400;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #abb2bf;
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+.form-input,
+textarea.form-input {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: #1e2127; /* Dark input background */
+    border: 1px solid #3b4048; /* Subtle border */
+    border-radius: 5px;
+    color: #abb2bf; /* Input text color */
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus,
+textarea.form-input:focus {
+    outline: none;
+    border-color: #61afef; /* Highlight focus */
+    box-shadow: 0 0 0 3px rgba(97, 175, 239, 0.2);
+}
+
+textarea.form-input {
+    resize: vertical; /* Allow vertical resize only */
+    min-height: 100px;
+    font-family: 'Courier New', Courier, monospace; /* Monospace for keys */
+}
+
+.field-hint {
+    display: block;
+    font-size: 0.85em;
+    color: #7f8a9f; /* Muted color for hints */
+    margin-top: 5px;
+}
+
+/* Checkbox Styles */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-top: 10px; /* Adjust spacing */
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    accent-color: #61afef; /* Color the checkmark */
+    cursor: pointer;
+}
+
+.checkbox-group label.checkbox-label {
+    margin-bottom: 0; /* Override default label margin */
+    font-weight: normal; /* Normal weight for checkbox label */
+    font-size: 1em;
+    cursor: pointer;
+}
+.checkbox-group .field-hint {
+    margin-left: 28px; /* Align hint under the label text */
+    margin-top: 2px;
+}
+
+/* --- Tag Input Styles --- */
+.tag-input-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow tags to wrap */
+    align-items: center;
+    padding: 5px 10px; /* Padding inside the container */
+    background-color: #1e2127;
+    border: 1px solid #3b4048;
+    border-radius: 5px;
+    min-height: 46px; /* Match input height */
+    cursor: text; /* Indicate text input */
+}
+.tag-input-container:focus-within { /* Style container when child input has focus */
+     border-color: #61afef;
+     box-shadow: 0 0 0 3px rgba(97, 175, 239, 0.2);
+}
+
+ul.tags-display {
+    display: contents; /* Make UL act like its children are direct descendants for flex */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tag {
+    display: inline-flex; /* Use flex for alignment within tag */
+    align-items: center;
+    background-color: #61afef; /* Blue tags */
+    color: #1e2127; /* Dark text on tag */
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin: 3px 5px 3px 0; /* Spacing around tags */
+    font-size: 0.9em;
+    font-weight: 500;
+}
+/* Different color for IP tags? Optional */
+#ip-tag-container .tag {
+    background-color: #98c379; /* Green tags for IPs */
+}
+
+.tag-remove {
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1em;
+    line-height: 1;
+    padding: 0 2px;
+}
+.tag-remove:hover {
+    color: #e06c75; /* Reddish color on hover */
+}
+
+input.tag-text-input {
+    flex-grow: 1; /* Take remaining space */
+    border: none;
+    outline: none;
+    padding: 8px 5px; /* Padding for the typing area */
+    background-color: transparent; /* Inherit container background */
+    color: #abb2bf;
+    min-width: 150px; /* Ensure minimum typing space */
+    font-size: 1em;
+}
+
+/* Suggestions Dropdown */
+.suggestions-list {
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+    background-color: #2c313a;
+    border: 1px solid #3b4048;
+    border-radius: 5px;
+    max-height: 150px; /* Limit height */
+    overflow-y: auto; /* Add scroll if needed */
+    position: absolute; /* Position relative to form-group */
+    width: calc(100% - 2px); /* Match container width minus borders */
+    z-index: 10; /* Appear above other elements */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none; /* Hidden by default */
+}
+
+.suggestion-item {
+    padding: 10px 15px;
+    color: #abb2bf;
+    cursor: pointer;
+    border-bottom: 1px solid #3b4048;
+}
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover,
+.suggestion-item.active { /* Style for hover/keyboard nav */
+    background-color: #61afef;
+    color: #1e2127;
+}
+
+/* Submit Button & Loading */
+.submit-group {
+    text-align: right; /* Align button to the right */
+    margin-top: 30px;
+}
+
+.access-button .spinner {
+    display: inline-block;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s ease-infinite;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Feedback and Results Styles */
+.form-feedback {
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    font-size: 0.95em;
+    display: none; /* Hidden by default */
+}
+.form-feedback.success {
+    background-color: rgba(152, 195, 121, 0.2); /* Green tint */
+    color: #98c379;
+    border: 1px solid #98c379;
+    display: block;
+}
+.form-feedback.error {
+    background-color: rgba(224, 108, 117, 0.2); /* Red tint */
+    color: #e06c75;
+    border: 1px solid #e06c75;
+    display: block;
+}
+.form-feedback.info {
+    background-color: rgba(97, 175, 239, 0.2); /* Blue tint */
+    color: #61afef;
+    border: 1px solid #61afef;
+    display: block;
+}
+
+results-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #1e2127;
+    border: 1px solid #3b4048;
+    border-radius: 5px;
+}
+
+.results-container h2 {
+    color: #61afef;
+    margin-bottom: 15px;
+    font-weight: 400;
+    border-bottom: 1px solid #3b4048;
+    padding-bottom: 10px;
+}
+
+#results-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px; /* Or adjust as needed */
+    overflow-y: auto; /* Scroll for long lists */
+}
+
+#results-list li {
+    padding: 8px 0;
+    border-bottom: 1px dashed #3b4048;
+    font-size: 0.9em;
+    line-height: 1.4; /* Improve readability */
+    display: flex; /* Use flex for better alignment */
+    flex-wrap: wrap; /* Allow wrapping if message is long */
+    align-items: flex-start; /* Align items to the top */
+}
+#results-list li:last-child {
+    border-bottom: none;
+}
+
+#results-list .ip-address {
+    font-weight: bold;
+    color: #abb2bf;
+    min-width: 140px; /* Adjust as needed for alignment */
+    margin-right: 10px; /* Space between IP and status */
+    flex-shrink: 0; /* Don't let IP shrink */
+}
+
+#results-list .status-success,
+#results-list .status-failure {
+    font-weight: bold;
+    margin-right: 10px; /* Space between status and message */
+    flex-shrink: 0; /* Don't let status shrink */
+}
+
+#results-list .status-success { color: #98c379; } /* Green */
+#results-list .status-failure { color: #e06c75; } /* Red */
+
+/* Add icons using ::before */
+#results-list .status-success::before {
+     content: '✔ '; /* Checkmark */
+     font-weight: bold; /* Make icon bold too */
+}
+#results-list .status-failure::before {
+     content: '✖ '; /* Cross */
+     font-weight: bold;
+}
+
+#results-list .message {
+    color: #7f8a9f; /* Muted color for message */
+    /* Let the message take remaining space */
+    flex-grow: 1;
+}
+
+/* --- Remove Access Page Specific Styles --- */
+
+#remove-access-form h2 {
+    font-size: 1.4em;
+    color: #abb2bf;
+    margin-bottom: 20px;
+    font-weight: 400;
+    border-bottom: 1px solid #3b4048;
+    padding-bottom: 10px;
+}
+#remove-access-form h2 #display-username {
+    font-weight: 600;
+    color: #e06c75; /* Use a distinct color for the username */
+}
+
+
+.ip-list-container {
+    background-color: #1e2127; /* Slightly darker background for the list area */
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #3b4048;
+    margin-bottom: 25px;
+}
+
+.select-all-container {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #3b4048;
+}
+
+.select-all-container input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+    accent-color: #61afef;
+    cursor: pointer;
+}
+
+.select-all-container label {
+    margin-bottom: 0; /* Override default */
+    font-weight: 500;
+    font-size: 0.95em;
+    color: #abb2bf;
+    cursor: pointer;
+}
+
+#ip-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px; /* Limit height and allow scroll */
+    overflow-y: auto;
+}
+
+#ip-list li {
+    display: flex;
+    align-items: center;
+    padding: 8px 5px; /* Padding for list items */
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+}
+#ip-list li:hover {
+     background-color: #2c313a; /* Subtle hover */
+}
+
+
+#ip-list input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-right: 12px;
+    accent-color: #e06c75; /* Use danger color for remove action */
+    cursor: pointer;
+    flex-shrink: 0; /* Prevent checkbox shrinking */
+}
+
+#ip-list label {
+    margin-bottom: 0;
+    font-size: 1em;
+    color: #abb2bf;
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace; /* Monospace looks good for IPs */
+    flex-grow: 1; /* Allow label to take space */
+}
+
+/* Style for the final remove button */
+.access-button.danger {
+    background-color: #e06c75; /* Red for removal */
+}
+.access-button.danger:hover {
+    background-color: #d7606a;
+    filter: brightness(1.1);
+}
+.access-button.danger:active {
+    background-color: #c95862;
+    transform: scale(0.98);
+    filter: brightness(0.95);
+}
+
+/* Ensure spinners on secondary buttons look okay */
+.access-button.secondary .spinner {
+     border-top-color: #fff;
+}
+.access-button.danger .spinner {
+     border-top-color: #fff;
+}
+
+.ip-search-container {
+    margin-bottom: 15px; 
+}
+
+#ip-list li.hidden-by-search {
+    display: none;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* --- DataTables Theme Adjustments --- */
+
+/* Container for the logs page */
+.logs-container {
+    max-width: 1200px; /* Allow logs table to be wider */
+}
+
+/* Wrapper for responsiveness */
+.table-responsive-wrapper {
+    overflow-x: auto; /* Add horizontal scroll on small screens if needed */
+    margin-top: 20px;
+}
+
+/* General table styling */
+table.dataTable {
+    border-collapse: collapse !important; /* Override default */
+    border: 1px solid #3b4048;
+    margin-bottom: 15px; /* Space below table */
+}
+
+table.dataTable thead th {
+    background-color: #2c313a; /* Dark header */
+    color: #abb2bf;
+    border-bottom: 2px solid #61afef; /* Accent border */
+    padding: 12px 18px; /* Adjust padding */
+    text-align: left;
+    font-weight: 600;
+}
+
+table.dataTable tbody td {
+    color: #abb2bf;
+    padding: 10px 18px; /* Match header horizontal padding */
+    border: 1px solid #3b4048; /* Cell borders */
+    vertical-align: middle;
+}
+
+/* Stripe styling */
+table.dataTable.stripe tbody tr.odd {
+    background-color: #21252b; /* Slightly different for odd rows */
+}
+table.dataTable.stripe tbody tr.even {
+     background-color: #282c34; /* Match container background */
+}
+
+/* Hover styling */
+table.dataTable.hover tbody tr:hover {
+    background-color: #3b4048 !important; /* Hover effect */
+    color: #ffffff;
+}
+
+/* DataTables Controls */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    margin-bottom: 15px; /* Space around controls */
+    color: #abb2bf !important; /* Text color for info/labels */
+}
+
+/* Search box */
+.dataTables_wrapper .dataTables_filter input[type="search"] {
+    background-color: #1e2127;
+    border: 1px solid #3b4048;
+    border-radius: 4px;
+    padding: 8px 10px;
+    color: #abb2bf;
+    margin-left: 5px; /* Space next to "Search:" label */
+}
+.dataTables_wrapper .dataTables_filter input[type="search"]:focus {
+    outline: none;
+    border-color: #61afef;
+    box-shadow: 0 0 0 3px rgba(97, 175, 239, 0.2);
+}
+
+/* Length Select Dropdown */
+.dataTables_wrapper .dataTables_length select {
+    background-color: #1e2127;
+    border: 1px solid #3b4048;
+    border-radius: 4px;
+    padding: 6px 25px 6px 10px; /* Adjust padding for arrow */
+    color: #abb2bf;
+    margin: 0 5px; /* Space around select */
+    cursor: pointer;
+}
+
+/* Pagination Buttons */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 6px 12px;
+    margin: 0 2px;
+    border: 1px solid #3b4048;
+    background-color: #282c34;
+    color: #abb2bf !important; /* Override default link color */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #3b4048;
+    border-color: #61afef;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background-color: #61afef;
+    border-color: #61afef;
+    color: #1e2127 !important; /* Dark text on active button */
+    font-weight: bold;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+    background-color: #21252b;
+    color: #5c6370 !important; /* Muted color for disabled */
+    border-color: #3b4048;
+    cursor: default;
+}
+
+/* Sorting Icons (Needs DataTables default CSS loaded) */
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc {
+    /* Basic styling if default icons aren't visible/themed */
+     background-image: none !important; /* Remove default if overriding */
+}
+table.dataTable thead .sorting::after,
+table.dataTable thead .sorting_asc::after,
+table.dataTable thead .sorting_desc::after {
+     content: ''; /* Add custom icons via ::after */
+     display: inline-block;
+     width: 1em;
+     height: 1em;
+     margin-left: 0.5em;
+     opacity: 0.4;
+     /* background-image: url(...); customize */
+}
+table.dataTable thead .sorting_asc::after { opacity: 1; /* full opacity for active */ }
+table.dataTable thead .sorting_desc::after { opacity: 1; /* full opacity for active */ }
+
+
+/****************************/
+/* --- Dashboard Styles --- */
+
+.dashboard-container {
+    width: 100%;
+    max-width: 1200px; /* Adjust max-width as needed */
+    padding: 40px 20px; /* Add padding around the dashboard */
+    margin: 0 auto; /* Center the container */
+    text-align: center; /* Center heading and subtitle */
+}
+
+.dashboard-container h1 {
+    font-size: 2.8em; /* Slightly smaller than original H1 if needed */
+    color: #61afef;
+    margin-bottom: 15px; /* Less space below title */
+    font-weight: 400;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1em;
+    color: #7f8a9f; /* Muted color */
+    margin-bottom: 40px;
+}
+
+.tool-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; /* Space between cards */
+    justify-content: center; /* Center cards horizontally */
+    padding: 0; /* Remove padding if any */
+    list-style: none;
+}
+
+.tool-card {
+    background-color: #282c34; /* Card background */
+    border-radius: 8px;
+    border: 1px solid #3b4048; /* Subtle border */
+    padding: 25px 30px;
+    text-align: left; /* Align text inside card to the left */
+    text-decoration: none; /* Remove underline from link */
+    color: #abb2bf; /* Default text color */
+    width: calc(33.333% - 20px); /* Aim for 3 columns, adjust based on gap */
+    min-width: 280px; /* Minimum card width */
+    max-width: 350px; /* Maximum card width */
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
+    display: flex; /* Use flex for icon + content layout */
+    flex-direction: column; /* Stack icon/content vertically */
+    align-items: center; /* Center items horizontally */
+    cursor: pointer;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px); /* Lift effect */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+    border-color: #61afef; /* Highlight border */
+}
+
+.tool-card-icon {
+    font-size: 3em; /* Large icon */
+    color: #61afef; /* Icon color */
+    margin-bottom: 20px; /* Space below icon */
+}
+
+.tool-card-content h2 {
+    font-size: 1.4em;
+    color: #c8ccd4; /* Slightly brighter heading */
+    margin-bottom: 10px;
+    font-weight: 600;
+    text-align: center; /* Center card title */
+}
+
+.tool-card-content p {
+    font-size: 0.95em;
+    line-height: 1.5;
+    color: #7f8a9f; /* Muted description color */
+    text-align: center; /* Center description */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .tool-card {
+        width: calc(50% - 15px); /* 2 columns on medium screens */
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-container h1 {
+        font-size: 2.2em;
+    }
+    .dashboard-subtitle {
+        font-size: 1em;
+        margin-bottom: 30px;
+    }
+    .tool-grid {
+        gap: 20px;
+    }
+    .tool-card {
+        width: 100%; /* 1 column on small screens */
+        max-width: 450px; /* Allow full width */
+        padding: 20px 25px;
+    }
+    .tool-card-icon {
+        font-size: 2.5em;
+        margin-bottom: 15px;
+    }
+    .tool-card-content h2 {
+        font-size: 1.3em;
+    }
+    .tool-card-content p {
+        font-size: 0.9em;
+    }
+}
