@@ -14,7 +14,17 @@
 <body>
     <div class="form-container logs-container"> 
         <a href="{{ url_for('accesspoint') }}" class="back-link">&larr; Back to AccessPoint</a>
-        <h1>Current Access Report</h1>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1>Current Access Report</h1>
+            <!-- Display logged in user and logout link -->
+            {% if current_user.is_authenticated %}
+                <div style="text-align: right;">
+                   <span style="margin-right: 15px;">Logged in as: <strong>{{ current_user.id }}</strong></span>
+                   <a href="{{ url_for('auth.logout') }}" class="access-button tertiary" style="padding: 8px 15px; font-size: 0.9em; width: auto; margin-bottom: 0;">Logout</a>
+                </div>
+            {% endif %}
+       </div>
 
         {% if error_message %}
             <div class="form-feedback error" style="display: block;">{{ error_message }}</div>
@@ -27,10 +37,11 @@
                         <th>Timestamp</th>
                         <th>IP Address</th>
                         <th>Username</th>
+                        <th>Action By</th>
                     </tr>
                 </thead>
                 <tbody>
-                    
+                    <!-- DataTables populates this -->
                 </tbody>
             </table>
         </div>
@@ -63,7 +74,8 @@
                       }
                     },
                     { data: 'IP Address' }, 
-                    { data: 'Username' }   
+                    { data: 'Username' },   
+                    { data: 'Action By' }
                 ],
                 // Configuration options:
                 paging: true,        // Enable pagination
@@ -77,8 +89,14 @@
                 language: {
                     search: "_INPUT_", // Just the input box
                     searchPlaceholder: "Filter records..."
-                }
-
+                },
+                // Set default content for missing data (optional)
+                columnDefs: [
+                    {
+                        targets: [3], // Target the 'Action By' column (index 3)
+                        defaultContent: "<i>N/A</i>" // Display if data is null/undefined
+                    }
+                ]
             }); 
         }); 
     </script>

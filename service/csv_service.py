@@ -1,9 +1,7 @@
 import csv
-import fileinput
 import os
 from datetime import datetime
 import logging
-import sys
 
 logger = logging.getLogger(__name__)
 DATA_FILE = "logs/user_records.csv"
@@ -45,8 +43,7 @@ def write_to_csv(username, ip, action_by):
     try:
         file_exists = os.path.exists(DATA_FILE)
         with open(DATA_FILE, mode='a', newline='') as csvfile:
-            fieldnames = ['Timestamp', 'IP Address', 'Username']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer = csv.DictWriter(csvfile, fieldnames=FIELDNAMES)
             if not file_exists:
                 writer.writeheader()
             writer.writerow({''

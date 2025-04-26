@@ -169,7 +169,7 @@ def create_user():
         results = {}
         all_success = True
         for ip in ips:
-            success, message = create_user_on_server(ip, username, pub_key, add_to_sudoers)
+            success, message = create_user_on_server(ip, username, pub_key, add_to_sudoers, current_user.id if current_user.is_authenticated else 'anonymous')
             results[ip] = {'success': success, 'message': message}
             if not success:
                 all_success = False
