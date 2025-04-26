@@ -46,7 +46,7 @@ def write_to_csv(username, ip, action_by):
             writer = csv.DictWriter(csvfile, fieldnames=FIELDNAMES)
             if not file_exists:
                 writer.writeheader()
-            writer.writerow({''
+            writer.writerow({
                 'Timestamp': datetime.now().isoformat(), 
                 'IP Address': ip, 
                 'Username': username, 
