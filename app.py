@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, jsonify, request, render_template, url_for, flash, redirect
 from flask_cors import CORS
 from flask_login import LoginManager, login_required, current_user
@@ -53,6 +54,11 @@ def load_user(user_id):
 # --- Register Blueprints ---
 app.register_blueprint(auth_bp) # Register the auth blueprint
 # --- End Blueprints ---
+
+
+@app.context_processor
+def inject_now():
+    return {'now': datetime.utcnow}
 
 @app.route('/')
 @login_required

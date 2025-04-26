@@ -1,68 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remove Access - AccessPoint</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div class="form-container">
-        <a href="{{ url_for('accesspoint') }}" class="back-link">&larr; Back to AccessPoint</a>
-        <h1>Remove User Access</h1>
+{% extends "base.html" %}
 
-        <div id="form-feedback" class="form-feedback" aria-live="polite"></div>
+{% block title %}Remove Access - AccessPoint{% endblock %}
 
-        <div id="find-user-stage">
-             <div class="form-group">
-                <label for="username">Username to Remove</label>
-                <input type="text" id="username" name="username" class="form-input" required placeholder="e.g., aditya.01">
-                <small class="field-hint">Enter the username whose access you want to manage.</small>
-            </div>
-            <div class="form-group submit-group">
-                 <button type="button" id="find-servers-btn" class="access-button secondary">
-                     Find Servers
-                     <span class="spinner" style="display: none;"></span>
-                 </button>
-            </div>
+{% block content %}
+<div class="form-container">
+    <a href="{{ url_for('accesspoint') }}" class="back-link">&larr; Back to AccessPoint</a>
+    <h1>Remove User Access</h1>
+    <div id="form-feedback" class="form-feedback" aria-live="polite"></div>
+
+    <!-- Stage 1: Find User -->
+    <div id="find-user-stage">
+         <div class="form-group">
+            <label for="username">Username to Remove</label>
+            <input type="text" id="username" name="username" class="form-input" required placeholder="e.g., aditya.01">
+            <small class="field-hint">Enter the username whose access you want to manage.</small>
         </div>
-
-        <form id="remove-access-form" style="display: none;">
-            <h2 id="server-list-heading">Servers for user: <span id="display-username"></span></h2>
-
-            <div class="form-group ip-list-container">
-                <!-- === IP Search Input Added Here === -->
-                <div class="ip-search-container">
-                     <label for="ip-search-input" class="visually-hidden">Filter IPs</label> 
-                     <input type="search" id="ip-search-input" placeholder="Filter displayed IPs..." class="form-input">
-                </div>
-                <!-- === End Search Input === -->
-
-                <div class="select-all-container">
-                     <input type="checkbox" id="select-all-ips" title="Select/Deselect All">
-                     <label for="select-all-ips">Select/Deselect All IPs</label>
-                </div>
-                <ul id="ip-list">
-                    <!-- JS populates this -->
-                </ul>
-                 <small class="field-hint">Select the servers from which to remove the user. Only selected IPs will be affected.</small>
-            </div>
-
-            <div class="form-group submit-group">
-                 <button type="submit" id="submit-removal-btn" class="access-button danger">
-                     Remove Access from Selected
-                     <span class="spinner" style="display: none;"></span>
-                 </button>
-            </div>
-        </form>
-
-        <div id="results-details" class="results-container" style="display: none;">
-            <h2>Processing Results</h2>
-            <ul id="results-list"></ul>
+        <div class="form-group submit-group">
+             <button type="button" id="find-servers-btn" class="access-button secondary">
+                 Find Servers
+                 <span class="spinner" style="display: none;"></span>
+             </button>
         </div>
-
     </div>
 
+    <!-- Stage 2: Remove from Specific Servers -->
+    <form id="remove-access-form" action="{{ url_for('remove_user') }}" method="POST" style="display: none;"> <!-- Added action/method -->
+        <h2 id="server-list-heading">Servers for user: <span id="display-username"></span></h2>
+        <div class="form-group ip-list-container">
+            <!-- IP Search Input -->
+            <div class="ip-search-container">
+                 <label for="ip-search-input" class="visually-hidden">Filter IPs</label>
+                 <input type="search" id="ip-search-input" placeholder="Filter displayed IPs..." class="form-input">
+            </div>
+            <!-- Select All -->
+            <div class="select-all-container">
+                 <input type="checkbox" id="select-all-ips" title="Select/Deselect All">
+                 <label for="select-all-ips">Select/Deselect All IPs</label>
+            </div>
+            <!-- IP List -->
+            <ul id="ip-list"></ul>
+            <small class="field-hint">Select the servers from which to remove the user. Only selected IPs will be affected.</small>
+        </div>
+        <!-- Submit Removal -->
+        <div class="form-group submit-group">
+             <button type="submit" id="submit-removal-btn" class="access-button danger">
+                 Remove Access from Selected
+                 <span class="spinner" style="display: none;"></span>
+             </button>
+        </div>
+    </form>
+
+    <!-- Results Area -->
+    <div id="results-details" class="results-container" style="display: none;">
+        <h2>Processing Results</h2>
+        <ul id="results-list"></ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
     <script src="{{ url_for('static', filename='js/removeaccess.js') }}"></script>
-</body>
-</html>
+{% endblock %}
