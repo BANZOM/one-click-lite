@@ -1,42 +1,23 @@
-# Configuration Sample
+# Linux Admin Portal
 
-## Create User Configuration
-Below is a sample JSON configuration object that you can use as a template:
+A streamlined application for SSH access management across multiple servers, designed for SRE/DevOps/IT-Admins teams.
 
-```json
-{
-    "username": "sample_user",
-    "groups": "sre,devops",
-    "ips": "192.168.1.100",
-    "pub_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ... your_public_key",
-    "add_to_sudoers": true
-}
-```
-### Field Descriptions
+## Overview
 
-- `username`: The system username to be created or configured
-- `groups`: The Groups for IP/Server Access
-- `ips`: IP address(es) for access control
-- `pub_key`: Your SSH public key for authentication
-- `add_to_sudoers`: Boolean flag to determine if the user should have sudo privileges
+Provides a secure web interface to manage SSH access across your server infrastructure. It allows administrators to:
 
-Replace the values with your actual configuration data.
+- **Grant SSH access** to users across multiple servers or server groups
+- **Remove SSH access** for users from specific servers or all servers
+- **View access logs** for audit and compliance
+- **Group servers** for easier management
 
-## Remove User Configuration
-Below is a sample JSON configuration object for removing a user:
+## Features
 
-```json
-{
-    "username": "sample_user",
-    "ips": [
-        "192.168.1.100",
-        ...
-    ],
-}
-```
-
-### Field Descriptions
-- `username`: The system username to be removed
-- `ips`: IP address(es) for access control
-
+- **Role-based access control** with secure authentication
+- **Server grouping** for simplified management
+- **Public key management** for secure SSH access
+- **Sudo privileges management** for elevated access
+- **Comprehensive logging** for auditing
+- **API endpoints** for integration with other systems
+- **Responsive UI** for desktop and mobile access
 

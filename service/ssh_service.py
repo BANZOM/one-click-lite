@@ -1,8 +1,13 @@
+import io
 import paramiko
 import os
 from dotenv import load_dotenv
 import logging
 import socket
+
+# For Debugging, when running the script directly
+# import sys
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from service.crypt_service import decrypt_file
 load_dotenv()
@@ -39,8 +44,22 @@ class SSHClient(paramiko.SSHClient):
         if self._pem_file_path and os.path.exists(self._pem_file_path):
             try:
                 logger.info(f"Attempting key-based authentication to {self.ip} as {self._admin_username} using {self._pem_file_path}")
-                private_key_data = decrypt_file(self._pem_file_path, self._crypt_password)
-                private_key = paramiko.RSAKey(file_obj=private_key_data.decode())
+
+                private_key_bytes = decrypt_file(self._pem_file_path, self._crypt_password)
+                if not private_key_bytes:
+                    message = f"Decryption of {self._encrypted_pem_path} returned empty data."
+                    logger.error(message)
+                    return False, message
+
+                try:
+                    decrypted_key_string = private_key_bytes.decode('utf-8')
+                except UnicodeDecodeError:
+                    logger.error(f"Failed to decode decrypted key from {self._encrypted_pem_path} as UTF-8. Is it a valid PEM key?")
+                    return False, f"Decrypted key from {self._encrypted_pem_path} is not valid UTF-8 text."
+                
+                key_file_obj = io.StringIO(decrypted_key_string)
+                private_key = paramiko.RSAKey(file_obj=key_file_obj)
+
                 super().connect(self.ip, username=self._admin_username, pkey=private_key, timeout=5)
                 return True, f"Connected to {self.ip} as {self._admin_username}"
             except paramiko.AuthenticationException:
@@ -62,6 +81,24 @@ class SSHClient(paramiko.SSHClient):
             logger.error(f"Neither the admin password nor the PEM file was found")
             return False, "Authentication details not provided"
 
+
+if __name__ == "__main__":
+    # Example usage
+    ssh_client = SSHClient("127.0.0.1")
+    success, message = ssh_client.connect()
+    try:
+        if success:
+            print("Connected successfully")
+            # Execute a command
+            stdin, stdout, stderr = ssh_client.exec_command("cat /etc/hostname")
+            print(stdout.read().decode())
+        else:
+            print(f"Connection failed: {message}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        ssh_client.close()
+        print("Connection closed")
 
 
 

@@ -1,3 +1,4 @@
+import os
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
@@ -5,6 +6,8 @@ from cryptography.hazmat.primitives.ciphers import algorithms, modes, Cipher
 from cryptography.hazmat.primitives.padding import PKCS7
 import secrets
 import logging
+from dotenv import load_dotenv
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -102,7 +105,15 @@ def decrypt_file(input_file_path: str, password: str) -> bytes:
 
 
 if __name__ == "__main__":
-    # encrypt_file("sample.txt", "encrypted.enc", "banzo")
-    content = decrypt_file("encrypted.enc", "banzo")
+    PEM_FILE_PATH = "/home/aditya/.ssh/DEV.pem"
+    ENCRYP_FILE_PATH = "encrypted_dev.enc"
+    CRYPT_PASSWORD = os.getenv("CRYPT_PASSWORD", "banzo")
+
+    # encrypt_file(PEM_FILE_PATH, ENCRYP_FILE_PATH, CRYPT_PASSWORD)
+    # print(f"Encrypted {PEM_FILE_PATH} to {ENCRYP_FILE_PATH}")
+
+    # Decrypt the file to verify
+    # Note: This is just for demonstration. In a real application, you would not decrypt the file like this.
+    content = decrypt_file(ENCRYP_FILE_PATH, CRYPT_PASSWORD)
     print(content)
 
